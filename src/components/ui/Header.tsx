@@ -105,7 +105,7 @@ const CoBrandingHeader: React.FC<CoBrandingProps> = ({ customerName, customerLog
             </div>
           )}
           
-          <Avatar name="Miguel Johnson" size={36} />
+          <Avatar name="Michael Johnson" size={36} />
         </div>
       </div>
     </div>
