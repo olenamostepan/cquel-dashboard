@@ -43,7 +43,7 @@ const CoBrandingHeader: React.FC<CoBrandingProps> = ({ customerName, customerLog
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                src={customerLogoSrc || "/logos/Company logos/IP-logo"}
+                src={customerLogoSrc || "/logos/Company logos/IP-logo 1.png"}
                 alt={`${customerName} logo`}
               className="h-[32px] w-auto object-contain"
               onError={(e) => {
