@@ -214,7 +214,7 @@ export default function Home() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back, Simon
+              Welcome back Gideon
             </div>
             <AllProjectsView onTabChange={handleTabChange} />
           </section>
