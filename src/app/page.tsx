@@ -186,7 +186,7 @@ export default function Home() {
                   paddingBottom: "var(--Distance-32, 32px)",
                 }}
               >
-                Welcome back Gemma
+                Welcome back Aurélie
               </div>
               {/* Client demo version */}
               <div>
@@ -214,7 +214,7 @@ export default function Home() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back Gemma
+              Welcome back Aurélie
             </div>
             <AllProjectsView onTabChange={handleTabChange} />
           </section>
