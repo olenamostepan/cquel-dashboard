@@ -10,6 +10,7 @@ import TendersView from "@/components/dashboard/TendersView";
 import SurveysView from "@/components/dashboard/SurveysView";
 import PricingView from "@/components/dashboard/PricingView";
 import BriefsView from "@/components/dashboard/BriefsView";
+import ContractsView from "@/components/dashboard/ContractsView";
 import ProjectDetailView from "@/components/project/ProjectDetailView";
 import TenderResultsView from "@/components/tender/TenderResultsView";
 import UploadModal from "@/components/upload/UploadModal";
@@ -86,7 +87,7 @@ export default function Home() {
       const tabParam = urlParams.get('tab');
       const _projectIdParam = urlParams.get('projectId');
       
-      if (tabParam && ['focus', 'all', 'briefs', 'tenders', 'surveys', 'pricing', 'project-detail', 'tender-results'].includes(tabParam)) {
+      if (tabParam && ['focus', 'all', 'briefs', 'tenders', 'surveys', 'pricing', 'contracts', 'project-detail', 'tender-results'].includes(tabParam)) {
         setActive(tabParam);
       } else {
         // Default to focus if no tab parameter or invalid tab
@@ -116,7 +117,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Header 
-                    customerName="Zinergy" 
+                    customerName="Your Company" 
         showBreadcrumbs={active === "project-detail" || active === "tender-results"}
         breadcrumbItems={active === "project-detail" ? [
           {
@@ -169,6 +170,7 @@ export default function Home() {
             { id: "tenders", label: "Tenders" },
             { id: "surveys", label: "Surveys" },
             { id: "pricing", label: "Pricing" },
+            { id: "contracts", label: "Contracts" },
           ]}
         />
       )}
@@ -186,7 +188,7 @@ export default function Home() {
                   paddingBottom: "var(--Distance-32, 32px)",
                 }}
               >
-                Welcome back Aurélie
+                Welcome back Gemma
               </div>
               {/* Client demo version */}
               <div>
@@ -214,7 +216,7 @@ export default function Home() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back Aurélie
+              Welcome back
             </div>
             <AllProjectsView onTabChange={handleTabChange} />
           </section>
@@ -253,6 +255,12 @@ export default function Home() {
           </section>
         )}
 
+        {active === "contracts" && (
+          <section>
+            <ContractsView />
+          </section>
+        )}
+
         {active === "project-detail" && (
           <section>
             <ProjectDetailView />
@@ -265,7 +273,7 @@ export default function Home() {
           </section>
         )}
 
-        {active !== "focus" && active !== "all" && active !== "tenders" && active !== "surveys" && active !== "pricing" && active !== "briefs" && active !== "project-detail" && active !== "tender-results" && (
+        {active !== "focus" && active !== "all" && active !== "tenders" && active !== "surveys" && active !== "pricing" && active !== "briefs" && active !== "contracts" && active !== "project-detail" && active !== "tender-results" && (
           <section>
             <div
               className="text-[var(--text-primary)] font-extrabold"
@@ -276,7 +284,7 @@ export default function Home() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back, Simon
+              Welcome back Gemma
             </div>
             <div className="bg-white border border-[var(--border-light)] rounded-lg p-6 text-[14px] text-[var(--text-secondary)]">
               {active.charAt(0).toUpperCase() + active.slice(1)} content coming soon
