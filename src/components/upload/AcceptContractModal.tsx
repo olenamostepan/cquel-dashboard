@@ -62,34 +62,21 @@ export const AcceptContractModal: React.FC<AcceptContractModalProps> = ({
         </button>
 
         {/* Header */}
-        <div className="px-8 pt-8 pb-6">
-          <div className="flex items-center gap-4 pr-8">
-            {/* Contract Icon */}
-            <div 
-              className="w-16 h-16 flex items-center justify-center rounded-lg"
-              style={{ backgroundColor: "#F3F4F6" }}
-            >
-              <img 
-                src="/assets/contract accepting.svg" 
-                alt="Contract accepting" 
-                className="w-8 h-8"
-              />
-            </div>
-            
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center gap-4">
+            <img
+              src="/assets/contract accepting.svg"
+              alt="Contract accepting"
+              className="w-14 h-14"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMTIgNVYxOU0xOSAxMkg1IiBzdHJva2U9IiNmOTczMjIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=";
+              }}
+            />
             <div>
-              <h2 
-                className="text-gray-900 mb-2"
-                style={{ 
-                  fontSize: "20px", 
-                  fontWeight: "800" 
-                }}
-              >
+              <h2 className="text-gray-900" style={{ fontSize: "20px", fontWeight: "800" }}>
                 Accepting your contract
               </h2>
-              <p 
-                className="text-gray-600"
-                style={{ fontSize: "16px" }}
-              >
+              <p className="text-gray-600 mt-1" style={{ fontSize: "14px" }}>
                 This will approve your contract draft and prepare it for final coordination with your selected supplier.
               </p>
             </div>
@@ -97,7 +84,7 @@ export const AcceptContractModal: React.FC<AcceptContractModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="px-8 pb-6">
+        <div className="p-6">
           {/* Final Details Section */}
           <div 
             className="p-6 rounded-lg mb-6 border"
