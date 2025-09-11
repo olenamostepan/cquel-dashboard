@@ -3,6 +3,7 @@ import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
+import NegotiatePriceModal from "@/components/upload/NegotiatePriceModal";
 
 // Statistics Cards Component
 const PricingStatisticsCards: React.FC = () => {
@@ -138,6 +139,7 @@ interface PricingCardProps {
   solutionType?: "solar" | "heat-pumps" | "led" | "ev-charging";
   isActiveProject?: boolean;
   isAccepted?: boolean;
+  onActionClick?: (action: string, pricingId: string, projectName: string, supplier: string) => void;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({ 
@@ -151,7 +153,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
   showDropdown = false,
   solutionType,
   isActiveProject = false,
-  isAccepted = false
+  isAccepted = false,
+  onActionClick
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -255,7 +258,10 @@ const PricingCard: React.FC<PricingCardProps> = ({
               <AdvancedActionDropdown 
                 isOpen={dropdownOpen}
                 onToggle={() => setDropdownOpen(!dropdownOpen)}
-                onSelect={(action) => console.log(`Selected action: ${action}`)}
+                onSelect={(action) => {
+                  const supplier = "Heat Pumps LTD"; // Extract from _fileName or pass as prop
+                  onActionClick?.(action, id, projectName, supplier);
+                }}
               />
             ) : (
               <Button variant="neutral" size="custom" className="w-[140px] whitespace-nowrap">
@@ -345,7 +351,9 @@ const SearchFilterBar: React.FC = () => {
 };
 
 // Needs Attention Section
-const NeedsAttentionSection: React.FC = () => {
+const NeedsAttentionSection: React.FC<{
+  onActionClick?: (action: string, pricingId: string, projectName: string, supplier: string) => void;
+}> = ({ onActionClick }) => {
   const pricingItems = [
     {
       id: "1",
@@ -364,7 +372,7 @@ const NeedsAttentionSection: React.FC = () => {
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Needs Attention</h2>
       <div className="space-y-4">
         {pricingItems.map((item, index) => (
-          <PricingCard key={index} {...item} />
+          <PricingCard key={index} {...item} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
@@ -372,7 +380,9 @@ const NeedsAttentionSection: React.FC = () => {
 };
 
 // Active Projects Section
-const ActiveProjectsSection: React.FC = () => {
+const ActiveProjectsSection: React.FC<{
+  onActionClick?: (action: string, pricingId: string, projectName: string, supplier: string) => void;
+}> = ({ onActionClick }) => {
   const pricingItems = [
     {
       id: "2",
@@ -399,7 +409,7 @@ const ActiveProjectsSection: React.FC = () => {
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Active Projects</h2>
       <div className="space-y-4">
         {pricingItems.map((item, index) => (
-          <PricingCard key={index} {...item} isActiveProject={true} />
+          <PricingCard key={index} {...item} isActiveProject={true} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
@@ -407,7 +417,9 @@ const ActiveProjectsSection: React.FC = () => {
 };
 
 // Accepted Section
-const AcceptedSection: React.FC = () => {
+const AcceptedSection: React.FC<{
+  onActionClick?: (action: string, pricingId: string, projectName: string, supplier: string) => void;
+}> = ({ onActionClick }) => {
   const pricingItems = [
     {
       id: "4",
@@ -425,7 +437,7 @@ const AcceptedSection: React.FC = () => {
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Accepted</h2>
       <div className="space-y-4">
         {pricingItems.map((item, index) => (
-          <PricingCard key={index} {...item} isAccepted={true} />
+          <PricingCard key={index} {...item} isAccepted={true} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
@@ -433,6 +445,40 @@ const AcceptedSection: React.FC = () => {
 };
 
 export const PricingView: React.FC = () => {
+  const [isNegotiateModalOpen, setIsNegotiateModalOpen] = useState(false);
+  const [currentPricingData, setCurrentPricingData] = useState<{
+    pricingId: string;
+    projectName: string;
+    supplier: string;
+    currentPrice?: string;
+    projectId: string;
+  } | null>(null);
+
+  const handleNegotiatePrice = async (pricingId: string, negotiationRequest: string) => {
+    // Simulate API call
+    console.log(`Negotiating price for ${pricingId}:`, negotiationRequest);
+    
+    // Simulate delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Here you would typically make an API call to send the negotiation request
+    // and update the pricing card status to show "Negotiation in progress"
+    
+    console.log("Negotiation request sent successfully");
+  };
+
+  const handleActionClick = (action: string, pricingId: string, projectName: string, supplier: string) => {
+    if (action === "negotiate") {
+      setCurrentPricingData({
+        pricingId,
+        projectName,
+        supplier,
+        projectId: pricingId // Using pricingId as projectId for now
+      });
+      setIsNegotiateModalOpen(true);
+    }
+  };
+
   return (
     <div className="space-y-6" style={{ marginTop: "32px" }}>
       {/* Header with Statistics and Latest Updates Widget */}
@@ -492,11 +538,24 @@ export const PricingView: React.FC = () => {
         
         {/* Pricing Sections */}
         <div className="space-y-6 mt-6">
-          <NeedsAttentionSection />
-          <ActiveProjectsSection />
-          <AcceptedSection />
+          <NeedsAttentionSection onActionClick={handleActionClick} />
+          <ActiveProjectsSection onActionClick={handleActionClick} />
+          <AcceptedSection onActionClick={handleActionClick} />
         </div>
       </div>
+
+      {/* Negotiate Price Modal */}
+      {currentPricingData && (
+        <NegotiatePriceModal
+          isOpen={isNegotiateModalOpen}
+          onClose={() => {
+            setIsNegotiateModalOpen(false);
+            setCurrentPricingData(null);
+          }}
+          pricingData={currentPricingData}
+          onNegotiatePrice={handleNegotiatePrice}
+        />
+      )}
     </div>
   );
 };
