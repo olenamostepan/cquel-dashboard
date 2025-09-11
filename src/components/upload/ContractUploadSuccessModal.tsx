@@ -71,7 +71,7 @@ export const ContractUploadSuccessModal: React.FC<ContractUploadSuccessModalProp
             style={{ 
               fontSize: "16px", 
               fontWeight: "700",
-              textAlign: "center"
+              textAlign: "left"
             }}
           >
             What you can do now
