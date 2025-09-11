@@ -86,7 +86,7 @@ export const AcceptContractModal: React.FC<AcceptContractModalProps> = ({
                 className="text-gray-600"
                 style={{ fontSize: "16px" }}
               >
-                This will approve your agreement and officially begin project implementation with your selected supplier.
+                This will approve your contract draft and prepare it for final coordination with your selected supplier.
               </p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export const AcceptContractModal: React.FC<AcceptContractModalProps> = ({
               className="text-gray-700"
               style={{ fontSize: "14px" }}
             >
-              CQuel will handle contract coordination, arrange final signing, and coordinate project kickoff with regular updates throughout implementation.
+              Your approved contract will be ready to download and take to your supplier for final signing. CQuel will coordinate the project kickoff once contracts are signed and provide regular updates throughout implementation.
             </p>
           </div>
 
