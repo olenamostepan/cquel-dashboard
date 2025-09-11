@@ -409,18 +409,18 @@ const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string,
       id: "2",
       projectName: "Avenue Victor Hugo Solar PV",
       location: "120 Avenue Victor Hugo, 75116 Paris",
-      responsibility: "supplier" as const,
+      responsibility: "cquel" as const,
       _fileName: "Contract.zip from Solar Solutions LTD",
-      status: "Awaiting revised quote",
+      status: "CQuel preparing new contract version",
       solutionType: "solar" as const
     },
     {
       id: "3",
       projectName: "Friedrichstraße HVAC",
       location: "Friedrichstraße 44, 10117 Berlin",
-      responsibility: "supplier" as const,
+      responsibility: "cquel" as const,
       _fileName: "Contract.zip from Heat Pumps LTD",
-      status: "Preparing detailed breakdown",
+      status: "CQuel preparing new contract version",
       solutionType: "heat-pumps" as const
     }
   ];
