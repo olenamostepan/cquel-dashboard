@@ -5,6 +5,7 @@ import Card from "@/components/ui/Card";
 import ContractItemCard, { ContractItemCardProps } from "@/components/dashboard/ContractItemCard";
 import ContractSuccessBanner from "@/components/upload/ContractSuccessBanner";
 import ContractUploadModal from "@/components/upload/ContractUploadModal";
+import ContractRequestHelpModal from "@/components/upload/ContractRequestHelpModal";
 import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
@@ -160,7 +161,7 @@ const ContractTabBar: React.FC<{ activeTab: string; onTabChange: (tab: string) =
 };
 
 // Ready to Create Contracts Section
-const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractId: string, projectName?: string) => void }> = ({ onActionClick }) => {
   return (
     <div className="space-y-8">
       {/* Needs Attention Section */}
@@ -380,7 +381,7 @@ const ContractCard: React.FC<ContractCardProps> = ({
 };
 
 // Generated Contracts Section - Needs Attention
-const GeneratedNeedsAttentionSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+const GeneratedNeedsAttentionSection: React.FC<{ onActionClick: (action: string, contractId: string, projectName?: string) => void }> = ({ onActionClick }) => {
   const contractItems = [
     {
       id: "1",
@@ -407,7 +408,7 @@ const GeneratedNeedsAttentionSection: React.FC<{ onActionClick: (action: string,
 };
 
 // Generated Contracts Section - Active Projects
-const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string, contractId: string, projectName?: string) => void }> = ({ onActionClick }) => {
   const contractItems = [
     {
       id: "2",
@@ -442,7 +443,7 @@ const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string,
 };
 
 // Generated Contracts Section - Accepted
-const GeneratedAcceptedSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+const GeneratedAcceptedSection: React.FC<{ onActionClick: (action: string, contractId: string, projectName?: string) => void }> = ({ onActionClick }) => {
   const contractItems = [
     {
       id: "4",
@@ -468,7 +469,7 @@ const GeneratedAcceptedSection: React.FC<{ onActionClick: (action: string, contr
 };
 
 // Generated Contracts Section
-const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, contractId: string, projectName?: string) => void }> = ({ onActionClick }) => {
   return (
     <div className="space-y-6">
       <GeneratedNeedsAttentionSection onActionClick={onActionClick} />
@@ -487,16 +488,24 @@ const ContractsView: React.FC = () => {
     projectName?: string;
   } | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isRequestHelpModalOpen, setIsRequestHelpModalOpen] = useState(false);
   const [currentContractId, setCurrentContractId] = useState<string>("");
+  const [currentProjectName, setCurrentProjectName] = useState<string>("");
 
   // Contract action handler
-  const handleContractAction = (action: string, contractId: string) => {
+  const handleContractAction = (action: string, contractId: string, projectName?: string) => {
     console.log(`Contract action: ${action} for contract: ${contractId}`);
     // Handle different contract actions here
     switch (action) {
       case 'upload-contract':
         setCurrentContractId(contractId);
+        setCurrentProjectName(projectName || 'Contract Project');
         setIsUploadModalOpen(true);
+        break;
+      case 'request-help':
+        setCurrentContractId(contractId);
+        setCurrentProjectName(projectName || 'Contract Project');
+        setIsRequestHelpModalOpen(true);
         break;
       case 'upload-success':
         console.log('Contract uploaded successfully');
@@ -507,12 +516,12 @@ const ContractsView: React.FC = () => {
         });
         setShowSuccessBanner(true);
         break;
-      case 'request-help':
-        console.log('Requesting CQuel help for contract creation');
+      case 'request-help-success':
+        console.log('Help request sent successfully');
         setSuccessBannerData({
           contractCount: 1,
           contractType: 'request-help',
-          projectName: 'Contract Project'
+          projectName: currentProjectName
         });
         setShowSuccessBanner(true);
         break;
@@ -619,6 +628,20 @@ const ContractsView: React.FC = () => {
         }}
         contractId={currentContractId}
         projectName="Contract Project"
+        companyName="Company Name"
+      />
+
+      {/* Contract Request Help Modal */}
+      <ContractRequestHelpModal
+        isOpen={isRequestHelpModalOpen}
+        onClose={() => setIsRequestHelpModalOpen(false)}
+        onSendRequest={(projectId, projectName) => {
+          console.log('Help request sent for project:', projectName);
+          setIsRequestHelpModalOpen(false);
+          handleContractAction('request-help-success', projectId, projectName);
+        }}
+        projectId={currentContractId}
+        projectName={currentProjectName}
         companyName="Company Name"
       />
     </div>

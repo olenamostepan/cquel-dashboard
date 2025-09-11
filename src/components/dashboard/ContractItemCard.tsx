@@ -166,7 +166,7 @@ export interface ContractItemCardProps {
   isSimplified?: boolean;
   isActiveContracts?: boolean;
   statusMessage?: string;
-  onActionClick?: (action: string, contractId: string) => void;
+  onActionClick?: (action: string, contractId: string, projectName?: string) => void;
 }
 
 export const ContractItemCard: React.FC<ContractItemCardProps> = ({
@@ -207,7 +207,7 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
 
   const handleActionClick = (action?: string) => {
     if (onActionClick) {
-      onActionClick(action || actionType, id);
+      onActionClick(action || actionType, id, projectName);
     }
   };
 
