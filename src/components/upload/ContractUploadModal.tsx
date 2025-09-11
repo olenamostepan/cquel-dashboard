@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Upload, File, Trash2, FileText, Download } from "lucide-react";
+import { Upload, File, Trash2, FileText, Download, X } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 interface ContractFile {
@@ -33,25 +33,23 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
   const [files, setFiles] = useState<ContractFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadType, setUploadType] = useState<'upload' | 'request-help'>('upload');
 
   const validateFile = (file: File): string | null => {
     const allowedTypes = [
       'application/pdf', 
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'application/msword',
-      'text/plain',
       'image/jpeg', 
       'image/png'
     ];
-    const maxSize = 15 * 1024 * 1024; // 15MB for contracts
+    const maxSize = 10 * 1024 * 1024; // 10MB for contracts
 
     if (!allowedTypes.includes(file.type)) {
-      return 'File type not supported. Please upload PDF, DOC, DOCX, TXT, JPG, or PNG files.';
+      return 'File type not supported. Please upload PDF, DOCX, JPG, or PNG files.';
     }
 
     if (file.size > maxSize) {
-      return 'File size too large. Maximum size is 15MB.';
+      return 'File size too large. Maximum size is 10MB.';
     }
 
     return null;
@@ -109,26 +107,6 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
   };
 
   const handleContinue = async () => {
-    if (uploadType === 'request-help') {
-      // Handle request help flow
-      setIsUploading(true);
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsUploading(false);
-      
-      // Create a placeholder file for the help request
-      const helpRequestFile: ContractFile = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: `Contract_Help_Request_${contractId || 'new'}.txt`,
-        size: 0,
-        type: 'text/plain',
-        uploadedAt: new Date(),
-        contractType: 'generated'
-      };
-      
-      onSuccess([helpRequestFile]);
-      return;
-    }
-
     if (files.length === 0) return;
 
     setIsUploading(true);
@@ -166,190 +144,129 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[var(--border-light)]">
-          <div>
-            <h2 className="text-[20px] font-bold text-[var(--text-primary)]">
-              Upload Contract
-            </h2>
-            {projectName && (
+          <div className="flex items-center gap-4">
+            {/* Cloud Icon with Document */}
+            <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center relative">
+              <FileText className="w-8 h-8 text-blue-600" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-sm flex items-center justify-center">
+                <div className="w-2 h-2 bg-yellow-600 rounded-sm"></div>
+              </div>
+            </div>
+            <div>
+              <h2 className="text-[20px] font-bold text-[var(--text-primary)]">
+                Upload your contract
+              </h2>
               <p className="text-[14px] text-[var(--text-secondary)] mt-1">
-                {projectName} • {companyName}
+                We'll review your contract template and prepare it for signing with your selected supplier
               </p>
-            )}
+            </div>
           </div>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
           >
-            <span className="text-[18px] text-[var(--text-secondary)]">×</span>
+            <X className="w-5 h-5 text-[var(--text-secondary)]" />
           </button>
         </div>
 
         {/* Content */}
         <div className="p-6">
-          {/* Upload Type Selection */}
+          {/* File Upload Area */}
           <div className="mb-6">
-            <h3 className="text-[16px] font-bold text-[var(--text-primary)] mb-3">
-              Choose upload method:
-            </h3>
-            <div className="space-y-3">
-              <label className="flex items-center p-4 border border-[var(--border-light)] rounded-lg cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="uploadType"
-                  value="upload"
-                  checked={uploadType === 'upload'}
-                  onChange={(e) => setUploadType(e.target.value as 'upload')}
-                  className="mr-3"
-                />
-                <div>
-                  <div className="text-[14px] font-bold text-[var(--text-primary)]">
-                    Upload your own contract
-                  </div>
-                  <div className="text-[12px] text-[var(--text-secondary)]">
-                    Upload a contract file you've prepared
-                  </div>
-                </div>
-              </label>
-              
-              <label className="flex items-center p-4 border border-[var(--border-light)] rounded-lg cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="uploadType"
-                  value="request-help"
-                  checked={uploadType === 'request-help'}
-                  onChange={(e) => setUploadType(e.target.value as 'request-help')}
-                  className="mr-3"
-                />
-                <div>
-                  <div className="text-[14px] font-bold text-[var(--text-primary)]">
-                    Request help from CQuel
-                  </div>
-                  <div className="text-[12px] text-[var(--text-secondary)]">
-                    CQuel will create the contract for you
-                  </div>
-                </div>
+            {/* Drop Zone */}
+            <div
+              className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                isDragOver 
+                  ? 'border-green-500 bg-green-50' 
+                  : 'border-gray-300 hover:border-green-500'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <p className="text-[16px] font-bold text-green-600 mb-2">
+                Upload a file
+              </p>
+              <p className="text-[14px] text-gray-600 mb-4">
+                or drag and drop
+              </p>
+              <p className="text-[12px] text-gray-500 mb-4">
+                PDF, DOCX, JPG or PNG up to 10MB
+              </p>
+              <input
+                type="file"
+                multiple
+                accept=".pdf,.docx,.jpg,.jpeg,.png"
+                onChange={(e) => handleFileSelect(e.target.files)}
+                className="hidden"
+                id="contract-file-input"
+              />
+              <label
+                htmlFor="contract-file-input"
+                className="inline-block px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors"
+              >
+                Choose Files
               </label>
             </div>
-          </div>
 
-          {/* File Upload Area */}
-          {uploadType === 'upload' && (
-            <div className="mb-6">
-              <h3 className="text-[16px] font-bold text-[var(--text-primary)] mb-3">
-                Select contract files:
-              </h3>
-              
-              {/* Drop Zone */}
-              <div
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                  isDragOver 
-                    ? 'border-[var(--brand-primary)] bg-blue-50' 
-                    : 'border-[var(--border-default)] hover:border-[var(--brand-primary)]'
-                }`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                <Upload className="w-12 h-12 text-[var(--text-tertiary)] mx-auto mb-4" />
-                <p className="text-[16px] font-bold text-[var(--text-primary)] mb-2">
-                  Drop files here or click to browse
-                </p>
-                <p className="text-[14px] text-[var(--text-secondary)] mb-4">
-                  PDF, DOC, DOCX, TXT, JPG, PNG (max 15MB each)
-                </p>
-                <input
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-                  onChange={(e) => handleFileSelect(e.target.files)}
-                  className="hidden"
-                  id="contract-file-input"
-                />
-                <label
-                  htmlFor="contract-file-input"
-                  className="inline-block px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg cursor-pointer hover:bg-[var(--brand-primary-dark)] transition-colors"
-                >
-                  Choose Files
-                </label>
-              </div>
-
-              {/* File List */}
-              {files.length > 0 && (
-                <div className="mt-4 space-y-2">
-                  <h4 className="text-[14px] font-bold text-[var(--text-primary)]">
-                    Selected Files ({files.length}):
-                  </h4>
-                  {files.map((file) => (
-                    <div key={file.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <span className="text-[20px]">{getFileIcon(file.type)}</span>
-                        <div>
-                          <div className="text-[14px] font-bold text-[var(--text-primary)]">
-                            {file.name}
-                          </div>
-                          <div className="text-[12px] text-[var(--text-secondary)]">
-                            {formatFileSize(file.size)}
-                          </div>
+            {/* File List */}
+            {files.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <h4 className="text-[14px] font-bold text-[var(--text-primary)]">
+                  Selected Files ({files.length}):
+                </h4>
+                {files.map((file) => (
+                  <div key={file.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[20px]">{getFileIcon(file.type)}</span>
+                      <div>
+                        <div className="text-[14px] font-bold text-[var(--text-primary)]">
+                          {file.name}
+                        </div>
+                        <div className="text-[12px] text-[var(--text-secondary)]">
+                          {formatFileSize(file.size)}
                         </div>
                       </div>
-                      <button
-                        onClick={() => removeFile(file.id)}
-                        className="w-8 h-8 flex items-center justify-center hover:bg-red-100 rounded-full transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </button>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Help Request Info */}
-          {uploadType === 'request-help' && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div>
-                  <h4 className="text-[14px] font-bold text-blue-800 mb-1">
-                    CQuel Contract Creation
-                  </h4>
-                  <p className="text-[12px] text-blue-700">
-                    Our team will create a professional contract for this project. 
-                    You'll receive a notification when it's ready for review.
-                  </p>
-                </div>
+                    <button
+                      onClick={() => removeFile(file.id)}
+                      className="w-8 h-8 flex items-center justify-center hover:bg-red-100 rounded-full transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4 text-red-500" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-3 p-6 border-t border-[var(--border-light)]">
-          <Button
-            variant="neutral"
+          <button
             onClick={onClose}
             disabled={isUploading}
+            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
             Cancel
-          </Button>
-          <Button
-            variant="primary"
+          </button>
+          <button
             onClick={handleContinue}
-            disabled={isUploading || (uploadType === 'upload' && files.length === 0)}
+            disabled={isUploading || files.length === 0}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
           >
             {isUploading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                {uploadType === 'request-help' ? 'Requesting Help...' : 'Uploading...'}
+                Uploading...
               </div>
             ) : (
-              uploadType === 'request-help' ? 'Request Help' : 'Upload Contract'
+              'Upload'
             )}
-          </Button>
+          </button>
         </div>
       </div>
     </div>

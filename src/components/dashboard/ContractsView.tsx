@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Card from "@/components/ui/Card";
 import ContractItemCard, { ContractItemCardProps } from "@/components/dashboard/ContractItemCard";
 import ContractSuccessBanner from "@/components/upload/ContractSuccessBanner";
+import ContractUploadModal from "@/components/upload/ContractUploadModal";
 import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
@@ -485,12 +486,18 @@ const ContractsView: React.FC = () => {
     contractType: 'upload' | 'request-help';
     projectName?: string;
   } | null>(null);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [currentContractId, setCurrentContractId] = useState<string>("");
 
   // Contract action handler
   const handleContractAction = (action: string, contractId: string) => {
     console.log(`Contract action: ${action} for contract: ${contractId}`);
     // Handle different contract actions here
     switch (action) {
+      case 'upload-contract':
+        setCurrentContractId(contractId);
+        setIsUploadModalOpen(true);
+        break;
       case 'upload-success':
         console.log('Contract uploaded successfully');
         setSuccessBannerData({
@@ -600,6 +607,20 @@ const ContractsView: React.FC = () => {
           {activeContractTab === 'generated' && <GeneratedContractsSection onActionClick={handleContractAction} />}
         </div>
       </div>
+
+      {/* Contract Upload Modal */}
+      <ContractUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={(files) => {
+          console.log('Contract files uploaded:', files);
+          setIsUploadModalOpen(false);
+          handleContractAction('upload-success', currentContractId);
+        }}
+        contractId={currentContractId}
+        projectName="Contract Project"
+        companyName="Company Name"
+      />
     </div>
   );
 };
