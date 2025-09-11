@@ -6,6 +6,7 @@ import ContractItemCard, { ContractItemCardProps } from "@/components/dashboard/
 import ContractSuccessBanner from "@/components/upload/ContractSuccessBanner";
 import ContractUploadModal from "@/components/upload/ContractUploadModal";
 import ContractRequestHelpModal from "@/components/upload/ContractRequestHelpModal";
+import AcceptContractModal from "@/components/upload/AcceptContractModal";
 import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
@@ -366,7 +367,13 @@ const ContractCard: React.FC<ContractCardProps> = ({
               <AdvancedActionDropdown 
                 isOpen={dropdownOpen}
                 onToggle={() => setDropdownOpen(!dropdownOpen)}
-                onSelect={(action) => console.log(`Selected action: ${action}`)}
+                onSelect={(action) => {
+                  if (action === 'accept') {
+                    onActionClick('accept-contract', contract.id, contract.projectName);
+                  } else if (action === 'decline') {
+                    onActionClick('decline-contract', contract.id, contract.projectName);
+                  }
+                }}
               />
             ) : (
               <Button variant="neutral" size="custom" className="w-[140px] whitespace-nowrap">
@@ -489,8 +496,15 @@ const ContractsView: React.FC = () => {
   } | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isRequestHelpModalOpen, setIsRequestHelpModalOpen] = useState(false);
+  const [isAcceptContractModalOpen, setIsAcceptContractModalOpen] = useState(false);
   const [currentContractId, setCurrentContractId] = useState<string>("");
   const [currentProjectName, setCurrentProjectName] = useState<string>("");
+  const [currentContractData, setCurrentContractData] = useState<{
+    supplier: string;
+    projectName: string;
+    contractId: string;
+    projectId: string;
+  } | null>(null);
 
   // Contract action handler
   const handleContractAction = (action: string, contractId: string, projectName?: string) => {
@@ -506,6 +520,20 @@ const ContractsView: React.FC = () => {
         setCurrentContractId(contractId);
         setCurrentProjectName(projectName || 'Contract Project');
         setIsRequestHelpModalOpen(true);
+        break;
+      case 'accept-contract':
+        // Set contract data for the modal
+        setCurrentContractData({
+          supplier: 'Heat Pumps LTD', // This should come from contract data
+          projectName: projectName || 'Contract Project',
+          contractId: contractId,
+          projectId: contractId // Using contractId as projectId for now
+        });
+        setIsAcceptContractModalOpen(true);
+        break;
+      case 'decline-contract':
+        console.log('Declining contract:', contractId);
+        // Handle contract decline - could show a different modal or just log
         break;
       case 'upload-success':
         console.log('Contract uploaded successfully');
@@ -525,6 +553,15 @@ const ContractsView: React.FC = () => {
         });
         setShowSuccessBanner(true);
         break;
+      case 'accept-contract-success':
+        console.log('Contract accepted successfully');
+        setSuccessBannerData({
+          contractCount: 1,
+          contractType: 'upload', // Using upload type for now
+          projectName: currentContractData?.projectName || 'Contract Project'
+        });
+        setShowSuccessBanner(true);
+        break;
       case 'download-success':
         console.log('Contract downloaded successfully');
         break;
@@ -539,6 +576,20 @@ const ContractsView: React.FC = () => {
         break;
       default:
         console.log('Unknown action:', action);
+    }
+  };
+
+  // Contract acceptance handler
+  const handleAcceptContract = async (contractId: string) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Handle successful acceptance
+      handleContractAction('accept-contract-success', contractId);
+    } catch (error) {
+      console.error('Error accepting contract:', error);
+      throw error;
     }
   };
 
@@ -644,6 +695,16 @@ const ContractsView: React.FC = () => {
         projectName={currentProjectName}
         companyName="Company Name"
       />
+
+      {/* Accept Contract Modal */}
+      {currentContractData && (
+        <AcceptContractModal
+          isOpen={isAcceptContractModalOpen}
+          onClose={() => setIsAcceptContractModalOpen(false)}
+          contractData={currentContractData}
+          onAccept={handleAcceptContract}
+        />
+      )}
     </div>
   );
 };
