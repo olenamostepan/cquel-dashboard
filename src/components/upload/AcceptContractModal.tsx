@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, FileText } from "lucide-react";
+import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 interface AcceptContractModalProps {
@@ -69,7 +69,11 @@ export const AcceptContractModal: React.FC<AcceptContractModalProps> = ({
               className="w-16 h-16 flex items-center justify-center rounded-lg"
               style={{ backgroundColor: "#F3F4F6" }}
             >
-              <FileText className="w-8 h-8 text-gray-600" />
+              <img 
+                src="/assets/contract accepting.svg" 
+                alt="Contract accepting" 
+                className="w-8 h-8"
+              />
             </div>
             
             <div>
