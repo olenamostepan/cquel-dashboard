@@ -369,9 +369,9 @@ const ContractCard: React.FC<ContractCardProps> = ({
                 onToggle={() => setDropdownOpen(!dropdownOpen)}
                 onSelect={(action) => {
                   if (action === 'accept') {
-                    onActionClick('accept-contract', contract.id, contract.projectName);
+                    onActionClick('accept-contract', id, projectName);
                   } else if (action === 'decline') {
-                    onActionClick('decline-contract', contract.id, contract.projectName);
+                    onActionClick('decline-contract', id, projectName);
                   }
                 }}
               />
