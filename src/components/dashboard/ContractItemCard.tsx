@@ -330,7 +330,7 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
           </div>
           
           {/* Responsibility Badge */}
-          <div className="flex items-center justify-center flex-shrink-0 w-[100px] mr-12">
+          <div className="flex items-center flex-shrink-0 w-[100px] mr-12">
             <StatusBadge status={status} customMessage="CQuel's Action" />
           </div>
           
