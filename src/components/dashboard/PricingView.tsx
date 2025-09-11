@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
 import NegotiatePriceModal from "@/components/upload/NegotiatePriceModal";
 import RequestChangeModal from "@/components/upload/RequestChangeModal";
+import AcceptPricingModal from "@/components/upload/AcceptPricingModal";
 
 // Statistics Cards Component
 const PricingStatisticsCards: React.FC = () => {
@@ -448,6 +449,7 @@ const AcceptedSection: React.FC<{
 export const PricingView: React.FC = () => {
   const [isNegotiateModalOpen, setIsNegotiateModalOpen] = useState(false);
   const [isRequestChangeModalOpen, setIsRequestChangeModalOpen] = useState(false);
+  const [isAcceptPricingModalOpen, setIsAcceptPricingModalOpen] = useState(false);
   const [currentPricingData, setCurrentPricingData] = useState<{
     pricingId: string;
     projectName: string;
@@ -455,6 +457,7 @@ export const PricingView: React.FC = () => {
     currentPrice?: string;
     projectId: string;
     fileName?: string;
+    totalPrice?: string;
   } | null>(null);
 
   const handleNegotiatePrice = async (pricingId: string, negotiationRequest: string) => {
@@ -483,6 +486,20 @@ export const PricingView: React.FC = () => {
     console.log("Change request sent successfully");
   };
 
+  const handleAcceptPricing = async (pricingId: string) => {
+    // Simulate API call
+    console.log(`Accepting pricing for ${pricingId}`);
+    
+    // Simulate delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Here you would typically make an API call to accept the pricing
+    // and update the pricing card status to show "Accepted"
+    // Move the pricing to the "Accepted" section
+    
+    console.log("Pricing accepted successfully");
+  };
+
   const handleActionClick = (action: string, pricingId: string, projectName: string, supplier: string) => {
     if (action === "negotiate") {
       setCurrentPricingData({
@@ -502,6 +519,16 @@ export const PricingView: React.FC = () => {
         fileName: "Pricing Pack.zip"
       });
       setIsRequestChangeModalOpen(true);
+    } else if (action === "accept") {
+      setCurrentPricingData({
+        pricingId,
+        projectName,
+        supplier,
+        projectId: pricingId, // Using pricingId as projectId for now
+        fileName: "Pricing Pack.zip",
+        totalPrice: "£45,000" // Example price, would come from actual data
+      });
+      setIsAcceptPricingModalOpen(true);
     }
   };
 
@@ -593,6 +620,19 @@ export const PricingView: React.FC = () => {
           }}
           pricingData={currentPricingData}
           onRequestChange={handleRequestChange}
+        />
+      )}
+
+      {/* Accept Pricing Modal */}
+      {currentPricingData && (
+        <AcceptPricingModal
+          isOpen={isAcceptPricingModalOpen}
+          onClose={() => {
+            setIsAcceptPricingModalOpen(false);
+            setCurrentPricingData(null);
+          }}
+          pricingData={currentPricingData}
+          onAcceptPricing={handleAcceptPricing}
         />
       )}
     </div>
