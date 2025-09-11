@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Upload, File, Trash2, FileText, Download, X } from "lucide-react";
+import { Upload, File, Trash2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 interface ContractFile {
@@ -144,129 +144,113 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+      <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--border-light)]">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-4">
-            {/* Cloud Icon with Document */}
-            <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center relative">
-              <FileText className="w-8 h-8 text-blue-600" />
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-sm flex items-center justify-center">
-                <div className="w-2 h-2 bg-yellow-600 rounded-sm"></div>
-              </div>
-            </div>
+            <img
+              src="/assets/New project.svg"
+              alt=""
+              className="w-14 h-14"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMTIgNVYxOU0xOSAxMkg1IiBzdHJva2U9IiNmOTczMjIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=";
+              }}
+            />
             <div>
-              <h2 className="text-[20px] font-bold text-[var(--text-primary)]">
+              <h2 className="text-gray-900" style={{ fontSize: "20px", fontWeight: "800" }}>
                 Upload your contract
               </h2>
-              <p className="text-[14px] text-[var(--text-secondary)] mt-1">
+              <p className="text-gray-600 mt-1" style={{ fontSize: "14px" }}>
                 We'll review your contract template and prepare it for signing with your selected supplier
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5 text-[var(--text-secondary)]" />
-          </button>
         </div>
 
         {/* Content */}
         <div className="p-6">
-          {/* File Upload Area */}
-          <div className="mb-6">
-            {/* Drop Zone */}
-            <div
-              className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                isDragOver 
-                  ? 'border-green-500 bg-green-50' 
-                  : 'border-gray-300 hover:border-green-500'
-              }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <p className="text-[16px] font-bold text-green-600 mb-2">
+          {/* Upload Area */}
+          <div
+            className={`text-center transition-colors ${
+              isDragOver 
+                ? 'border-green-500 bg-green-50' 
+                : ''
+            }`}
+            style={{
+              borderRadius: "var(--CornerRadius, 8px)",
+              border: isDragOver ? "2px dashed #10b981" : "1px dashed var(--Colours-BorderDark, #D3D7DC)",
+              background: isDragOver ? "#f0fdf4" : "var(--Colours-ContainerBgGrey, #F9FAFB)",
+              padding: "20px"
+            }}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <Upload className="w-8 h-8 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-900 mb-2" style={{ fontSize: "14px" }}>
+              <span className="text-green-600 cursor-pointer hover:text-green-700">
                 Upload a file
-              </p>
-              <p className="text-[14px] text-gray-600 mb-4">
-                or drag and drop
-              </p>
-              <p className="text-[12px] text-gray-500 mb-4">
-                PDF, DOCX, JPG or PNG up to 10MB
-              </p>
-              <input
-                type="file"
-                multiple
-                accept=".pdf,.docx,.jpg,.jpeg,.png"
-                onChange={(e) => handleFileSelect(e.target.files)}
-                className="hidden"
-                id="contract-file-input"
-              />
-              <label
-                htmlFor="contract-file-input"
-                className="inline-block px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700 transition-colors"
-              >
-                Choose Files
-              </label>
-            </div>
+              </span>
+            </p>
+            <p className="text-gray-900 mb-2" style={{ fontSize: "14px" }}>
+              or drag and drop
+            </p>
+            <p className="text-[#1E2832]" style={{ fontSize: "14px" }}>
+              PDF, DOCX, JPG or PNG up to 10MB
+            </p>
+            <input
+              type="file"
+              multiple
+              accept=".pdf,.docx,.jpg,.jpeg,.png"
+              onChange={(e) => handleFileSelect(e.target.files)}
+              className="hidden"
+              id="contract-file-input"
+            />
+            <label htmlFor="contract-file-input" className="cursor-pointer">
+              <div className="mt-4"></div>
+            </label>
+          </div>
 
-            {/* File List */}
-            {files.length > 0 && (
-              <div className="mt-4 space-y-2">
-                <h4 className="text-[14px] font-bold text-[var(--text-primary)]">
-                  Selected Files ({files.length}):
-                </h4>
+          {/* Selected Files */}
+          {files.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-sm font-bold text-gray-900 mb-3">Selected Files ({files.length})</h3>
+              <div className="space-y-2">
                 {files.map((file) => (
                   <div key={file.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <span className="text-[20px]">{getFileIcon(file.type)}</span>
+                      <File className="w-5 h-5 text-gray-500" />
                       <div>
-                        <div className="text-[14px] font-bold text-[var(--text-primary)]">
-                          {file.name}
-                        </div>
-                        <div className="text-[12px] text-[var(--text-secondary)]">
-                          {formatFileSize(file.size)}
-                        </div>
+                        <p className="text-sm font-medium text-gray-900">{file.name}</p>
+                        <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => removeFile(file.id)}
-                      className="w-8 h-8 flex items-center justify-center hover:bg-red-100 rounded-full transition-colors"
+                      className="p-1 hover:bg-gray-200 rounded transition-colors"
                     >
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                      <Trash2 className="w-4 h-4 text-gray-500" />
                     </button>
                   </div>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-[var(--border-light)]">
-          <button
-            onClick={onClose}
-            disabled={isUploading}
-            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-          >
+        <div className="flex items-center justify-center gap-4 px-6 pb-6">
+          <Button variant="neutral" onClick={onClose} className="min-w-[300px]">
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button 
+            variant="primary" 
             onClick={handleContinue}
-            disabled={isUploading || files.length === 0}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+            disabled={files.length === 0 || isUploading}
+            className="min-w-[300px]"
           >
-            {isUploading ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Uploading...
-              </div>
-            ) : (
-              'Upload'
-            )}
-          </button>
+            {isUploading ? 'Uploading...' : 'Upload Contract'}
+          </Button>
         </div>
       </div>
     </div>
