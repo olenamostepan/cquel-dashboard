@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/ui/Header";
 import Navigation from "@/components/ui/Navigation";
@@ -17,7 +17,7 @@ import TenderResultsView from "@/components/tender/TenderResultsView";
 import UploadModal from "@/components/upload/UploadModal";
 import SuccessModal from "@/components/upload/SuccessModal";
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   
@@ -309,5 +309,13 @@ export default function Home() {
         userEmail="alex.johnson@company.com"
       />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
