@@ -4,6 +4,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
 import NegotiatePriceModal from "@/components/upload/NegotiatePriceModal";
+import RequestChangeModal from "@/components/upload/RequestChangeModal";
 
 // Statistics Cards Component
 const PricingStatisticsCards: React.FC = () => {
@@ -446,12 +447,14 @@ const AcceptedSection: React.FC<{
 
 export const PricingView: React.FC = () => {
   const [isNegotiateModalOpen, setIsNegotiateModalOpen] = useState(false);
+  const [isRequestChangeModalOpen, setIsRequestChangeModalOpen] = useState(false);
   const [currentPricingData, setCurrentPricingData] = useState<{
     pricingId: string;
     projectName: string;
     supplier: string;
     currentPrice?: string;
     projectId: string;
+    fileName?: string;
   } | null>(null);
 
   const handleNegotiatePrice = async (pricingId: string, negotiationRequest: string) => {
@@ -467,15 +470,38 @@ export const PricingView: React.FC = () => {
     console.log("Negotiation request sent successfully");
   };
 
+  const handleRequestChange = async (pricingId: string, changeRequest: string) => {
+    // Simulate API call
+    console.log(`Requesting change for ${pricingId}:`, changeRequest);
+    
+    // Simulate delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Here you would typically make an API call to send the change request
+    // and update the pricing card status to show "Revision requested"
+    
+    console.log("Change request sent successfully");
+  };
+
   const handleActionClick = (action: string, pricingId: string, projectName: string, supplier: string) => {
     if (action === "negotiate") {
       setCurrentPricingData({
         pricingId,
         projectName,
         supplier,
-        projectId: pricingId // Using pricingId as projectId for now
+        projectId: pricingId, // Using pricingId as projectId for now
+        fileName: "Pricing Pack.zip"
       });
       setIsNegotiateModalOpen(true);
+    } else if (action === "request-change") {
+      setCurrentPricingData({
+        pricingId,
+        projectName,
+        supplier,
+        projectId: pricingId, // Using pricingId as projectId for now
+        fileName: "Pricing Pack.zip"
+      });
+      setIsRequestChangeModalOpen(true);
     }
   };
 
@@ -554,6 +580,19 @@ export const PricingView: React.FC = () => {
           }}
           pricingData={currentPricingData}
           onNegotiatePrice={handleNegotiatePrice}
+        />
+      )}
+
+      {/* Request Change Modal */}
+      {currentPricingData && (
+        <RequestChangeModal
+          isOpen={isRequestChangeModalOpen}
+          onClose={() => {
+            setIsRequestChangeModalOpen(false);
+            setCurrentPricingData(null);
+          }}
+          pricingData={currentPricingData}
+          onRequestChange={handleRequestChange}
         />
       )}
     </div>

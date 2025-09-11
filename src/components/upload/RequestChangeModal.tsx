@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 
-interface NegotiatePriceModalProps {
+interface RequestChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
   pricingData: {
@@ -11,23 +11,24 @@ interface NegotiatePriceModalProps {
     supplier: string;
     currentPrice?: string;
     projectId: string;
+    fileName?: string;
   };
-  onNegotiatePrice: (pricingId: string, negotiationRequest: string) => Promise<void>;
+  onRequestChange: (pricingId: string, changeRequest: string) => Promise<void>;
 }
 
-const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
+const RequestChangeModal: React.FC<RequestChangeModalProps> = ({
   isOpen,
   onClose,
   pricingData,
-  onNegotiatePrice
+  onRequestChange
 }) => {
-  const [negotiationRequest, setNegotiationRequest] = useState("");
+  const [changeRequest, setChangeRequest] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (!negotiationRequest.trim()) {
-      setError("Please provide your negotiation details");
+    if (!changeRequest.trim()) {
+      setError("Please provide details about the changes you need");
       return;
     }
 
@@ -35,18 +36,18 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
     setError("");
 
     try {
-      await onNegotiatePrice(pricingData.pricingId, negotiationRequest);
-      setNegotiationRequest("");
+      await onRequestChange(pricingData.pricingId, changeRequest);
+      setChangeRequest("");
       onClose();
     } catch (err) {
-      setError("Failed to send negotiation request. Please try again.");
+      setError("Failed to send change request. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleClose = () => {
-    setNegotiationRequest("");
+    setChangeRequest("");
     setError("");
     onClose();
   };
@@ -64,7 +65,7 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
           <div className="flex items-center gap-4">
             <img
               src="/assets/New project.svg"
-              alt="Negotiate price"
+              alt="Request a change"
               className="w-14 h-14"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMTIgNVYxOU0xOSAxMkg1IiBzdHJva2U9IiNmOTczMjIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=";
@@ -72,7 +73,7 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
             />
             <div>
               <h2 className="text-[20px] font-extrabold text-[var(--text-primary)]">
-                Negotiate a price
+                Request a change
               </h2>
             </div>
           </div>
@@ -92,33 +93,33 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
               What happens next:
             </h3>
             <p className="text-[14px] text-[var(--text-secondary)] mb-4">
-              Your negotiation request goes directly to the supplier, with CQuel overseeing the process to ensure fair pricing and terms.
+              Your change request goes directly to the supplier, with CQuel managing the revision process to ensure accurate updated pricing.
             </p>
             <ul className="space-y-2">
               <li className="flex items-start gap-2 text-[14px] text-[var(--text-secondary)]">
                 <span className="text-[var(--brand-primary)] font-bold">•</span>
-                <span>CQuel provides market insights and negotiation support</span>
+                <span>CQuel validates technical feasibility</span>
               </li>
               <li className="flex items-start gap-2 text-[14px] text-[var(--text-secondary)]">
                 <span className="text-[var(--brand-primary)] font-bold">•</span>
-                <span>We track progress and keep you informed</span>
+                <span>We coordinate timeline and cost impacts</span>
               </li>
               <li className="flex items-start gap-2 text-[14px] text-[var(--text-secondary)]">
                 <span className="text-[var(--brand-primary)] font-bold">•</span>
-                <span>All responses come through our secure platform</span>
+                <span>Updated proposals come through our platform</span>
               </li>
             </ul>
           </div>
 
-          {/* Negotiation Input Section */}
+          {/* Change Request Input Section */}
           <div className="mb-6">
             <label className="block text-[14px] font-bold text-[var(--text-primary)] mb-2">
-              What would you like to negotiate?
+              What changes do you need?
             </label>
             <textarea
-              value={negotiationRequest}
-              onChange={(e) => setNegotiationRequest(e.target.value)}
-              placeholder="Please provide details about what you'd like to negotiate (e.g., pricing, terms, timeline, etc.)"
+              value={changeRequest}
+              onChange={(e) => setChangeRequest(e.target.value)}
+              placeholder="Please provide details about what changes you need (e.g., Change from 15×AIKO 445w panels to 20×AIKO 380w panels, Upgrade from 6 kW Fox inverter to 8 kW Fox inverter, Add battery storage system - 10kWh capacity, etc.)"
               className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
               style={{
                 fontSize: "14px",
@@ -146,7 +147,7 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
               size="custom"
               onClick={handleSubmit}
               className="flex-1"
-              disabled={isSubmitting || !negotiationRequest.trim()}
+              disabled={isSubmitting || !changeRequest.trim()}
             >
               {isSubmitting ? "Sending..." : "Send request"}
             </Button>
@@ -172,4 +173,4 @@ const NegotiatePriceModal: React.FC<NegotiatePriceModalProps> = ({
   );
 };
 
-export default NegotiatePriceModal;
+export default RequestChangeModal;
