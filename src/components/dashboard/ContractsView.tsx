@@ -17,20 +17,14 @@ const AdvancedActionDropdown: React.FC<{
   const actions = [
     { 
       value: "accept", 
-      label: "Accept pricing", 
+      label: "Accept contract", 
       description: "Approve and proceed",
       icon: "/assets/accept.svg"
     },
     { 
-      value: "request-change", 
-      label: "Request a change", 
-      description: "Modify the proposal",
-      icon: "/assets/change.svg"
-    },
-    { 
-      value: "negotiate", 
-      label: "Negotiate a price", 
-      description: "Discuss pricing terms",
+      value: "decline", 
+      label: "Decline contract", 
+      description: "Modify the contract",
       icon: "/assets/change.svg"
     }
   ];
@@ -52,7 +46,7 @@ const AdvancedActionDropdown: React.FC<{
           background: "var(--Colours-ContainerBgGrey, #F9FAFB)"
         }}
       >
-        <span>Actions</span>
+        <span>Accept contract</span>
         {isOpen ? (
           <ChevronUp className="w-4 h-4 text-[var(--text-tertiary)]" />
         ) : (
