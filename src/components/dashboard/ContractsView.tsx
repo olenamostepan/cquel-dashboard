@@ -8,6 +8,7 @@ import ContractUploadModal from "@/components/upload/ContractUploadModal";
 import ContractRequestHelpModal from "@/components/upload/ContractRequestHelpModal";
 import AcceptContractModal from "@/components/upload/AcceptContractModal";
 import ContractAcceptedModal from "@/components/upload/ContractAcceptedModal";
+import DeclineContractModal from "@/components/upload/DeclineContractModal";
 import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
@@ -515,6 +516,13 @@ const ContractsView: React.FC = () => {
     projectName: string;
     supplier: string;
   } | null>(null);
+  const [isDeclineContractModalOpen, setIsDeclineContractModalOpen] = useState(false);
+  const [declinedContractData, setDeclinedContractData] = useState<{
+    contractId: string;
+    projectName: string;
+    supplier: string;
+    projectId: string;
+  } | null>(null);
 
   // Contract action handler
   const handleContractAction = (action: string, contractId: string, projectName?: string) => {
@@ -542,8 +550,14 @@ const ContractsView: React.FC = () => {
         setIsAcceptContractModalOpen(true);
         break;
       case 'decline-contract':
-        console.log('Declining contract:', contractId);
-        // Handle contract decline - could show a different modal or just log
+        // Set contract data for the decline modal
+        setDeclinedContractData({
+          contractId: contractId,
+          projectName: projectName || 'Contract Project',
+          supplier: 'Heat Pumps LTD', // This should come from contract data
+          projectId: 'project-1' // This should come from contract data
+        });
+        setIsDeclineContractModalOpen(true);
         break;
       case 'upload-success':
         console.log('Contract uploaded successfully');
@@ -610,6 +624,36 @@ const ContractsView: React.FC = () => {
       setIsAcceptContractModalOpen(false);
     } catch (error) {
       console.error('Error accepting contract:', error);
+      throw error;
+    }
+  };
+
+  // Contract decline handler
+  const handleDeclineContract = async (contractId: string, feedback: string) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      console.log(`Contract ${contractId} declined with feedback: ${feedback}`);
+      
+      // Close the decline modal
+      setIsDeclineContractModalOpen(false);
+      setDeclinedContractData(null);
+      
+      // Show success banner
+      setSuccessBannerData({
+        contractCount: 1,
+        contractType: 'upload', // Using upload type for now
+        projectName: declinedContractData?.projectName || 'Contract Project'
+      });
+      setShowSuccessBanner(true);
+      
+      // Note: In a real application, this would trigger a state update
+      // to move the contract from its current location to the Generated Contracts tab
+      // and update its status to "CQuel preparing new contract version"
+      
+    } catch (error) {
+      console.error('Error declining contract:', error);
       throw error;
     }
   };
@@ -762,6 +806,19 @@ const ContractsView: React.FC = () => {
           contractData={acceptedContractData}
           onReturnToDashboard={handleReturnToDashboard}
           onDownloadContract={handleDownloadContract}
+        />
+      )}
+
+      {/* Decline Contract Modal */}
+      {declinedContractData && (
+        <DeclineContractModal
+          isOpen={isDeclineContractModalOpen}
+          onClose={() => {
+            setIsDeclineContractModalOpen(false);
+            setDeclinedContractData(null);
+          }}
+          contractData={declinedContractData}
+          onDeclineContract={handleDeclineContract}
         />
       )}
     </div>
