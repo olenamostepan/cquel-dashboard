@@ -7,6 +7,7 @@ import ContractSuccessBanner from "@/components/upload/ContractSuccessBanner";
 import ContractUploadModal from "@/components/upload/ContractUploadModal";
 import ContractRequestHelpModal from "@/components/upload/ContractRequestHelpModal";
 import AcceptContractModal from "@/components/upload/AcceptContractModal";
+import ContractAcceptedModal from "@/components/upload/ContractAcceptedModal";
 import { ExternalLink, ChevronDown, ChevronUp, Download } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ResponsibilityBadge from "./ResponsibilityBadge";
@@ -507,6 +508,13 @@ const ContractsView: React.FC = () => {
     contractId: string;
     projectId: string;
   } | null>(null);
+  const [isContractAcceptedModalOpen, setIsContractAcceptedModalOpen] = useState(false);
+  const [acceptedContractData, setAcceptedContractData] = useState<{
+    fileName: string;
+    downloadUrl: string;
+    projectName: string;
+    supplier: string;
+  } | null>(null);
 
   // Contract action handler
   const handleContractAction = (action: string, contractId: string, projectName?: string) => {
@@ -587,12 +595,51 @@ const ContractsView: React.FC = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Handle successful acceptance
-      handleContractAction('accept-contract-success', contractId);
+      // Set up contract data for success modal
+      if (currentContractData) {
+        setAcceptedContractData({
+          fileName: `${currentContractData.projectName.replace(/\s+/g, '_')}_Contract_Final.pdf`,
+          downloadUrl: `/api/contracts/${contractId}/download`,
+          projectName: currentContractData.projectName,
+          supplier: currentContractData.supplier
+        });
+        setIsContractAcceptedModalOpen(true);
+      }
+      
+      // Close the accept modal
+      setIsAcceptContractModalOpen(false);
     } catch (error) {
       console.error('Error accepting contract:', error);
       throw error;
     }
+  };
+
+  // Contract download handler
+  const handleDownloadContract = async (downloadUrl: string, fileName: string) => {
+    try {
+      // Simulate file download
+      const blob = new Blob(['Contract content'], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      console.log(`Downloaded contract: ${fileName}`);
+    } catch (error) {
+      console.error('Error downloading contract:', error);
+      throw error;
+    }
+  };
+
+  // Return to dashboard handler
+  const handleReturnToDashboard = () => {
+    setIsContractAcceptedModalOpen(false);
+    setAcceptedContractData(null);
+    // Refresh contracts list or update UI as needed
   };
 
   return (
@@ -705,6 +752,16 @@ const ContractsView: React.FC = () => {
           onClose={() => setIsAcceptContractModalOpen(false)}
           contractData={currentContractData}
           onAccept={handleAcceptContract}
+        />
+      )}
+
+      {/* Contract Accepted Success Modal */}
+      {acceptedContractData && (
+        <ContractAcceptedModal
+          isOpen={isContractAcceptedModalOpen}
+          contractData={acceptedContractData}
+          onReturnToDashboard={handleReturnToDashboard}
+          onDownloadContract={handleDownloadContract}
         />
       )}
     </div>
