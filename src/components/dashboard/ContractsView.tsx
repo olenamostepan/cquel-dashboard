@@ -106,26 +106,30 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
             id="contract-3"
             projectName="Leeds Retail HVAC"
             location="Leeds • ShopCentre"
-            contractFileInfo="HVAC_Agreement.docx for ClimateControl Ltd"
-            status="supplier-action"
-            dateIssued="Issued 10 Dec 2024"
-            actionType="accept"
-            actionButtonText="Accept Contract"
+            contractFileInfo=""
+            status="cquel-action"
+            dateIssued=""
+            actionType="create"
+            actionButtonText=""
             companyName="ClimateControl Ltd"
             solutionType="heat-pumps"
+            isActiveContracts={true}
+            statusMessage="CQuel is creating contract draft"
             onActionClick={onActionClick}
           />
           <ContractItemCard
             id="contract-4"
             projectName="Birmingham Warehouse Solar"
             location="Birmingham • LogisPark"
-            contractFileInfo="Solar_Installation.pdf for GreenEnergy Corp"
-            status="your-action"
-            dateIssued="Issued 8 Dec 2024"
+            contractFileInfo=""
+            status="cquel-action"
+            dateIssued=""
             actionType="create"
-            actionButtonText="Create Contract"
+            actionButtonText=""
             companyName="GreenEnergy Corp"
             solutionType="solar"
+            isActiveContracts={true}
+            statusMessage="CQuel is reviewing your contract"
             onActionClick={onActionClick}
           />
         </div>

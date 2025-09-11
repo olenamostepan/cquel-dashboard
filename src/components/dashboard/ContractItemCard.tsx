@@ -92,7 +92,7 @@ const ContractUploadDropdown: React.FC<{
 };
 
 // Status Badge Component (matching app-wide ResponsibilityBadge styling)
-const StatusBadge: React.FC<{ status: 'your-action' | 'cquel-action' | 'supplier-action' | 'completed' }> = ({ status }) => {
+const StatusBadge: React.FC<{ status: 'your-action' | 'cquel-action' | 'supplier-action' | 'completed'; customMessage?: string }> = ({ status, customMessage }) => {
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'your-action':
@@ -104,7 +104,7 @@ const StatusBadge: React.FC<{ status: 'your-action' | 'cquel-action' | 'supplier
         };
       case 'cquel-action':
         return {
-          label: "CQuel's Action",
+          label: customMessage || "CQuel's Action",
           background: '#eaf8f1',
           text: '#126e53',
           border: '#d4f0e3'
@@ -164,6 +164,8 @@ export interface ContractItemCardProps {
   solutionType?: 'led' | 'solar' | 'heat-pumps' | 'ev-charging';
   isHighlighted?: boolean;
   isSimplified?: boolean;
+  isActiveContracts?: boolean;
+  statusMessage?: string;
   onActionClick?: (action: string, contractId: string) => void;
 }
 
@@ -181,6 +183,8 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
   solutionType = 'led',
   isHighlighted = false,
   isSimplified = false,
+  isActiveContracts = false,
+  statusMessage,
   onActionClick
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -286,6 +290,54 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
         );
     }
   };
+
+  // Active Contracts simplified version - only icon, project info, and badge
+  if (isActiveContracts) {
+    return (
+      <div 
+        className="flex items-center p-4 border rounded-lg transition-colors hover:shadow-sm bg-white border-[var(--border-default)]"
+        style={{ 
+          height: "100px",
+          borderRadius: "var(--CornerRadius, 8px)",
+          border: "1px solid var(--Colours-BorderDark, #D3D7DC)",
+          background: "var(--Colours-ContainerBg, #FFF)"
+        }}
+      >
+        {/* LEFT SECTION - Project Info */}
+        <div className="flex items-center flex-1 min-w-0">
+          {/* Solution Icon */}
+          <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
+            <img
+              src={getSolutionIcon(solutionType)}
+              alt={solutionType}
+              className="w-14 h-14 object-contain"
+            />
+          </div>
+
+          {/* Project Details */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <div 
+                className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
+                onClick={() => {
+                  window.location.href = `/?tab=project-detail&projectId=${id}&sourceTab=contracts`;
+                }}
+              >
+                {projectName}
+              </div>
+              <ExternalLink size={16} className="text-[var(--text-tertiary)] shrink-0" />
+            </div>
+            <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
+          </div>
+        </div>
+
+        {/* RIGHT SECTION - Status Badge (Left-aligned) */}
+        <div className="flex-shrink-0 ml-6">
+          <StatusBadge status={status} customMessage={statusMessage} />
+        </div>
+      </div>
+    );
+  }
 
   if (isSimplified) {
     return (
