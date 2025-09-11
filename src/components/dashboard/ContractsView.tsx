@@ -141,37 +141,68 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
 
 // Generated Contracts Section
 const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+  // Contract data matching pricing structure
+  const generatedContracts = [
+    {
+      id: "1",
+      projectName: "Rue de la République EV Charging",
+      location: "85 Rue de la République, 69002 Lyon",
+      responsibility: "your" as const,
+      _fileName: "Contract.zip from Heat Pumps LTD",
+      status: "Ready for your review",
+      showDropdown: true,
+      solutionType: "ev-charging" as const
+    },
+    {
+      id: "2", 
+      projectName: "Avenue Victor Hugo Solar PV",
+      location: "120 Avenue Victor Hugo, 75116 Paris",
+      responsibility: "supplier" as const,
+      _fileName: "Contract.zip from Solar Solutions LTD",
+      status: "Awaiting revised quote",
+      solutionType: "solar" as const
+    },
+    {
+      id: "3",
+      projectName: "Friedrichstraße HVAC",
+      location: "Friedrichstraße 44, 10117 Berlin", 
+      responsibility: "supplier" as const,
+      _fileName: "Contract.zip from Heat Pumps LTD",
+      status: "Preparing detailed breakdown",
+      solutionType: "heat-pumps" as const
+    },
+    {
+      id: "4",
+      projectName: "Argyle Street EV Charging",
+      location: "36 Argyle Street, Glasgow, G2 8BX",
+      responsibility: "accepted" as const,
+      _fileName: "Contract.zip from EV Solutions LTD", 
+      status: "Accepted",
+      solutionType: "ev-charging" as const
+    }
+  ];
+
   return (
     <div className="space-y-8">
       <div>
         <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Generated Contracts</h3>
         <div className="space-y-3">
-          <ContractItemCard
-            id="contract-6"
-            projectName="Frankfurt EV Charging"
-            location="Frankfurt • AutoCorp"
-            contractFileInfo="EV_Charging_Contract.pdf for ChargePoint Solutions"
-            status="your-action"
-            dateIssued="Generated 14 Dec 2024"
-            actionType="accept"
-            actionButtonText="Send for signature"
-            companyName="ChargePoint Solutions"
-            solutionType="ev-charging"
-            onActionClick={onActionClick}
-          />
-          <ContractItemCard
-            id="contract-7"
-            projectName="Cologne Smart Metering"
-            location="Cologne • EnergyCorp"
-            contractFileInfo="Smart_Meter_Agreement.docx for MeterTech GmbH"
-            status="cquel-action"
-            dateIssued="Generated 13 Dec 2024"
-            actionType="download"
-            actionButtonText="Review contract"
-            companyName="MeterTech GmbH"
-            solutionType="led"
-            onActionClick={onActionClick}
-          />
+          {generatedContracts.map((contract, index) => (
+            <ContractItemCard
+              key={index}
+              id={contract.id}
+              projectName={contract.projectName}
+              location={contract.location}
+              contractFileInfo={contract._fileName}
+              status={contract.responsibility === "your" ? "your-action" : contract.responsibility === "supplier" ? "supplier-action" : "completed"}
+              dateIssued={contract.status}
+              actionType={contract.responsibility === "accepted" ? "accept" : "download"}
+              actionButtonText={contract.responsibility === "accepted" ? "Accepted" : "Download & Review"}
+              companyName={contract._fileName.split(" from ")[1]}
+              solutionType={contract.solutionType}
+              onActionClick={onActionClick}
+            />
+          ))}
         </div>
       </div>
     </div>
