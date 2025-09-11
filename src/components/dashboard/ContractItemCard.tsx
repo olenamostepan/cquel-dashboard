@@ -337,11 +337,11 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
         </div>
 
         {/* RIGHT SECTION - Date and Status Text (Right-aligned to far edge) */}
-        <div className="flex flex-col items-end flex-shrink-0 ml-auto text-right" style={{ width: "220px" }}>
-          <div className="text-[12px] text-[var(--text-secondary)] mb-1">
+        <div className="flex flex-col flex-shrink-0 ml-auto" style={{ width: "220px" }}>
+          <div className="text-[12px] text-[var(--text-secondary)] mb-1 text-right">
             Sent on 21 Aug 25
           </div>
-          <div className="text-[14px] text-[var(--text-primary)]">
+          <div className="text-[14px] text-[var(--text-primary)] text-right">
             {statusMessage}
           </div>
         </div>
