@@ -624,7 +624,7 @@ const BriefsView: React.FC<{
         <div className="flex border-b border-[var(--Colours-BorderLight,#F3F4F6)] mb-6">
           <button
             onClick={handleUploadedPlansTabClick}
-            className={`px-6 py-3 text-[14px] relative ${
+            className={`pl-0 pr-6 py-3 text-[14px] relative ${
               activeBriefsTab === 'uploaded' 
                 ? 'text-[var(--text-primary)] font-bold' 
                 : 'text-[var(--text-secondary)] font-normal'
@@ -642,7 +642,7 @@ const BriefsView: React.FC<{
               )}
             </div>
             {activeBriefsTab === 'uploaded' && (
-              <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-[#29b273]"></div>
+              <div className="absolute bottom-0 left-0 right-6 h-0.5 bg-[#29b273]"></div>
             )}
           </button>
           <button

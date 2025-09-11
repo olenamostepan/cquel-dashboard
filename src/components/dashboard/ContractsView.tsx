@@ -41,10 +41,10 @@ const ContractStatisticsCards: React.FC = () => {
 // Tab Bar Component
 const ContractTabBar: React.FC<{ activeTab: string; onTabChange: (tab: string) => void }> = ({ activeTab, onTabChange }) => {
   return (
-    <div className="flex border-b border-[var(--Colours-BorderLight,#F3F4F6)]">
+    <div className="flex border-b border-[var(--Colours-BorderLight,#F3F4F6)] mb-6">
       <button
         onClick={() => onTabChange('ready')}
-        className={`px-6 py-3 text-[14px] relative ${
+        className={`pl-0 pr-6 py-3 text-[14px] relative ${
           activeTab === 'ready' 
             ? 'text-[var(--text-primary)] font-bold' 
             : 'text-[var(--text-secondary)] font-normal'
@@ -52,7 +52,7 @@ const ContractTabBar: React.FC<{ activeTab: string; onTabChange: (tab: string) =
       >
         Ready to Create Contracts
         {activeTab === 'ready' && (
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#29b273]"></div>
+          <div className="absolute bottom-0 left-0 right-6 h-0.5 bg-[#29b273]"></div>
         )}
       </button>
       <button
@@ -65,7 +65,7 @@ const ContractTabBar: React.FC<{ activeTab: string; onTabChange: (tab: string) =
       >
         Generated Contracts
         {activeTab === 'generated' && (
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#29b273]"></div>
+          <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-[#29b273]"></div>
         )}
       </button>
     </div>
@@ -90,19 +90,9 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
             actionType="upload"
             actionButtonText="Upload Contract"
             companyName="Heat Pumps LTD"
-            isHighlighted={true}
-            onActionClick={onActionClick}
-          />
-          <ContractItemCard
-            id="contract-2"
-            projectName="Munich Warehouse Solar"
-            location="Munich • LogiCorp"
-            contractFileInfo="Solar_Contract.pdf for SolarTech GmbH"
-            status="cquel-action"
-            dateIssued="Issued 12 Dec 2024"
-            actionType="download"
-            actionButtonText="Download & Review"
-            companyName="SolarTech GmbH"
+            solutionType="heat-pumps"
+            isHighlighted={false}
+            isSimplified={true}
             onActionClick={onActionClick}
           />
         </div>
@@ -122,6 +112,7 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
             actionType="accept"
             actionButtonText="Accept Contract"
             companyName="ClimateControl Ltd"
+            solutionType="heat-pumps"
             onActionClick={onActionClick}
           />
           <ContractItemCard
@@ -134,29 +125,12 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
             actionType="create"
             actionButtonText="Create Contract"
             companyName="GreenEnergy Corp"
+            solutionType="solar"
             onActionClick={onActionClick}
           />
         </div>
       </div>
 
-      {/* Signed Contracts Section */}
-      <div>
-        <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Signed Contracts</h3>
-        <div className="space-y-3">
-          <ContractItemCard
-            id="contract-5"
-            projectName="Berlin Office LED"
-            location="Berlin • OfficeCorp"
-            contractFileInfo="LED_Contract_Signed.pdf for BrightLights AG"
-            status="completed"
-            dateIssued="Signed 15 Dec 2024"
-            actionType="download"
-            actionButtonText="Download & Review"
-            companyName="BrightLights AG"
-            onActionClick={onActionClick}
-          />
-        </div>
-      </div>
     </div>
   );
 };
@@ -178,6 +152,7 @@ const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, cont
             actionType="accept"
             actionButtonText="Send for signature"
             companyName="ChargePoint Solutions"
+            solutionType="ev-charging"
             onActionClick={onActionClick}
           />
           <ContractItemCard
@@ -190,6 +165,7 @@ const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, cont
             actionType="download"
             actionButtonText="Review contract"
             companyName="MeterTech GmbH"
+            solutionType="led"
             onActionClick={onActionClick}
           />
         </div>
@@ -295,22 +271,17 @@ const ContractsView: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Content - Contract Management */}
-      <div className="bg-white border border-[var(--border-light)] rounded-lg">
-        <div className="p-6">
-          <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">
-            Contract Management
-          </h3>
-          <p className="text-[14px] text-[var(--text-secondary)] mb-6">
-            Manage your project contracts, review terms, and track contract status.
-          </p>
-        </div>
-
+      {/* Main Content */}
+      <div className="bg-white border border-[var(--border-light)] rounded-lg p-6">
+        <h2 className="text-[20px] font-extrabold text-[var(--text-primary)] mb-6">
+          All Contracts
+        </h2>
+        
         {/* Tab Bar */}
         <ContractTabBar activeTab={activeContractTab} onTabChange={setActiveContractTab} />
         
         {/* Tab Content */}
-        <div className="p-6">
+        <div>
           {/* Success Banner */}
           {successBannerData && (
             <ContractSuccessBanner

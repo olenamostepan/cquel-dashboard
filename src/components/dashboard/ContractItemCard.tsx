@@ -14,17 +14,17 @@ const ContractUploadDropdown: React.FC<{
   onSelect: (action: string) => void;
 }> = ({ isOpen, onToggle, onSelect }) => {
   const actions = [
-    { 
-      value: "upload-contract", 
-      label: "Upload contract", 
-      description: "Send your own contract",
-      icon: Upload
+    {
+      value: "upload-contract",
+      label: "Upload contract",
+      description: "Send your own contact",
+      icon: "/assets/accept.svg"
     },
-    { 
-      value: "request-help", 
-      label: "Request help", 
-      description: "CQuel will create contract",
-      icon: FileText
+    {
+      value: "request-help",
+      label: "Request help",
+      description: "CQuel will create contact",
+      icon: "/assets/change.svg"
     }
   ];
 
@@ -33,9 +33,9 @@ const ContractUploadDropdown: React.FC<{
       <button
         onClick={onToggle}
         className="text-[14px] font-bold focus:outline-none flex items-center justify-between w-full whitespace-nowrap"
-        style={{ 
+        style={{
           display: "flex",
-          width: "180px",
+          width: "220px",
           padding: "var(--Distance-8, 8px) var(--Distance-12, 12px)",
           justifyContent: "space-between",
           alignItems: "center",
@@ -52,11 +52,11 @@ const ContractUploadDropdown: React.FC<{
           <ChevronDown className="w-4 h-4 text-[var(--text-tertiary)]" />
         )}
       </button>
-      
+
       {isOpen && (
-        <div 
+        <div
           className="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg z-10"
-          style={{ width: "180px" }}
+          style={{ width: "220px" }}
         >
           {actions.map((action) => (
             <button
@@ -68,7 +68,12 @@ const ContractUploadDropdown: React.FC<{
               }}
             >
               <div className="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                <action.icon className="w-4 h-4 text-[var(--text-tertiary)]" />
+                <img
+                  src={action.icon}
+                  alt=""
+                  className="w-5 h-5 object-contain"
+                  style={{ filter: "brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)" }}
+                />
               </div>
               <div className="flex flex-col items-start">
                 <div className="text-[14px] font-bold text-[var(--text-primary)]">
@@ -86,34 +91,44 @@ const ContractUploadDropdown: React.FC<{
   );
 };
 
-// Status Badge Component
+// Status Badge Component (matching app-wide ResponsibilityBadge styling)
 const StatusBadge: React.FC<{ status: 'your-action' | 'cquel-action' | 'supplier-action' | 'completed' }> = ({ status }) => {
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'your-action':
         return {
           label: "Your Action",
-          className: "bg-orange-100 text-orange-800 border-orange-200"
+          background: '#fdeee9',
+          text: '#e9571f',
+          border: '#fbddd2'
         };
       case 'cquel-action':
         return {
           label: "CQuel's Action",
-          className: "bg-blue-100 text-blue-800 border-blue-200"
+          background: '#eaf8f1',
+          text: '#126e53',
+          border: '#d4f0e3'
         };
       case 'supplier-action':
         return {
           label: "Supplier Action",
-          className: "bg-purple-100 text-purple-800 border-purple-200"
+          background: '#e8f1f8',
+          text: '#004b75',
+          border: '#d2e3f2'
         };
       case 'completed':
         return {
           label: "Completed",
-          className: "bg-green-100 text-green-800 border-green-200"
+          background: '#eaf8f1',
+          text: '#126e53',
+          border: '#d4f0e3'
         };
       default:
         return {
           label: "Unknown",
-          className: "bg-gray-100 text-gray-800 border-gray-200"
+          background: '#f3f4f6',
+          text: '#6b7280',
+          border: '#d1d5db'
         };
     }
   };
@@ -121,8 +136,13 @@ const StatusBadge: React.FC<{ status: 'your-action' | 'cquel-action' | 'supplier
   const config = getStatusConfig(status);
 
   return (
-    <span 
-      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${config.className}`}
+    <span
+      className="px-2 py-0.5 rounded-full text-[12px] font-bold border whitespace-nowrap"
+      style={{
+        backgroundColor: config.background,
+        color: config.text,
+        borderColor: config.border
+      }}
     >
       {config.label}
     </span>
@@ -141,7 +161,9 @@ export interface ContractItemCardProps {
   actionButtonText: string;
   companyName: string;
   companyLogo?: string;
+  solutionType?: 'led' | 'solar' | 'heat-pumps' | 'ev-charging';
   isHighlighted?: boolean;
+  isSimplified?: boolean;
   onActionClick?: (action: string, contractId: string) => void;
 }
 
@@ -156,11 +178,28 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
   actionButtonText,
   companyName,
   companyLogo,
+  solutionType = 'led',
   isHighlighted = false,
+  isSimplified = false,
   onActionClick
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  const getSolutionIcon = (type: string) => {
+    switch (type) {
+      case 'led':
+        return '/assets/led.svg';
+      case 'solar':
+        return '/assets/solar.svg';
+      case 'heat-pumps':
+        return '/assets/heat pumps.svg';
+      case 'ev-charging':
+        return '/assets/ev charging.svg';
+      default:
+        return '/assets/led.svg';
+    }
+  };
 
   const handleActionClick = (action?: string) => {
     if (onActionClick) {
@@ -189,15 +228,17 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
     switch (actionType) {
       case 'upload':
         return (
-          <Button 
-            variant="neutral" 
-            size="custom" 
-            className="w-[140px] whitespace-nowrap flex items-center gap-2"
-            onClick={() => setIsUploadModalOpen(true)}
-          >
-            <Upload className="w-4 h-4" />
-            {actionButtonText}
-          </Button>
+          <ContractUploadDropdown
+            isOpen={dropdownOpen}
+            onToggle={() => setDropdownOpen(!dropdownOpen)}
+            onSelect={(action) => {
+              if (action === 'upload-contract') {
+                setIsUploadModalOpen(true);
+              } else if (action === 'request-help') {
+                handleActionClick('request-help');
+              }
+            }}
+          />
         );
       case 'download':
         return (
@@ -246,62 +287,119 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
     }
   };
 
+  if (isSimplified) {
+    return (
+      <div 
+        className="flex items-center p-4 border rounded-lg transition-colors hover:shadow-sm bg-white border-[var(--border-default)]"
+        style={{ 
+          height: "100px",
+          borderRadius: "var(--CornerRadius, 8px)",
+          border: "1px solid var(--Colours-BorderDark, #D3D7DC)",
+          background: "var(--Colours-ContainerBg, #FFF)"
+        }}
+      >
+        {/* LEFT SECTION - Project Info */}
+        <div className="flex items-center flex-shrink-0 min-w-0" style={{ width: "300px" }}>
+          {/* Solution Icon */}
+          <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
+            <img
+              src={getSolutionIcon(solutionType)}
+              alt={solutionType}
+              className="w-14 h-14 object-contain"
+            />
+          </div>
+
+          {/* Project Details */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <div 
+                className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
+                onClick={() => {
+                  window.location.href = `/?tab=project-detail&projectId=${id}&sourceTab=contracts`;
+                }}
+              >
+                {projectName}
+              </div>
+              <ExternalLink size={16} className="text-[var(--text-tertiary)] shrink-0" />
+            </div>
+            <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
+          </div>
+        </div>
+
+        {/* CENTER SECTION - Status Badge (Fixed Position) */}
+        <div className="flex items-center justify-center flex-shrink-0" style={{ width: "200px", marginLeft: "50px" }}>
+          <StatusBadge status={status} />
+        </div>
+
+        {/* RIGHT SECTION - Action Button (Right-aligned to far edge) */}
+        <div className="flex-shrink-0 ml-auto">
+          {renderActionButton()}
+        </div>
+
+        {/* Upload Modal */}
+        <ContractUploadModal
+          isOpen={isUploadModalOpen}
+          onClose={() => setIsUploadModalOpen(false)}
+          onSuccess={handleUploadSuccess}
+          contractId={id}
+          projectName={projectName}
+          companyName={companyName}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div 
-      className={`flex items-center justify-between p-4 border rounded-lg transition-colors hover:shadow-sm ${
+    <div
+      className={`flex items-center p-4 border rounded-lg transition-colors hover:shadow-sm ${
         isHighlighted ? 'bg-green-50 border-green-200' : 'bg-white border-[var(--border-default)]'
       }`}
-      style={{ 
+      style={{
         height: "100px",
         borderRadius: "var(--CornerRadius, 8px)",
         border: isHighlighted ? "1px solid #D4F0E3" : "1px solid var(--Colours-BorderDark, #D3D7DC)",
         background: isHighlighted ? "var(--Colours-BgGreen, #EAF8F1)" : "var(--Colours-ContainerBg, #FFF)"
       }}
     >
-      {/* Company Avatar */}
-      <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
-        <Avatar 
-          name={companyName} 
-          src={companyLogo} 
-          size={56}
-        />
-      </div>
-
-      {/* Project Info */}
-      <div className="flex-1 min-w-0 max-w-[200px] mr-6">
-        <div className="flex items-center gap-2 mb-1">
-          <div 
-            className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
-            onClick={() => {
-              window.location.href = `/?tab=project-detail&projectId=${id}&sourceTab=contracts`;
-            }}
-          >
-            {projectName}
+        {/* LEFT SECTION - Project Info */}
+        <div className="flex items-center flex-shrink-0 min-w-0" style={{ width: "300px" }}>
+          {/* Solution Icon */}
+          <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
+            <img
+              src={getSolutionIcon(solutionType)}
+              alt={solutionType}
+              className="w-14 h-14 object-contain"
+            />
           </div>
-          <ExternalLink size={16} className="text-[var(--text-tertiary)] shrink-0" />
+
+          {/* Project Details */}
+          <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <div 
+              className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
+              onClick={() => {
+                window.location.href = `/?tab=project-detail&projectId=${id}&sourceTab=contracts`;
+              }}
+            >
+              {projectName}
+            </div>
+            <ExternalLink size={16} className="text-[var(--text-tertiary)] shrink-0" />
+          </div>
+          <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
+          <div className="text-[14px] text-[var(--text-primary)] truncate mt-1">{contractFileInfo}</div>
         </div>
-        <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
       </div>
 
-      {/* Contract File Info */}
-      <div className="flex-1 min-w-0 max-w-[200px] mr-6">
-        <div className="text-[14px] text-[var(--text-primary)] truncate">{contractFileInfo}</div>
-      </div>
+        {/* CENTER SECTION - Status Badge (Fixed Position) */}
+        <div className="flex items-center justify-center flex-shrink-0" style={{ width: "200px", marginLeft: "50px" }}>
+          <StatusBadge status={status} />
+        </div>
 
-      {/* Status Badge */}
-      <div className="flex items-center justify-center flex-shrink-0 w-[120px] mr-6">
-        <StatusBadge status={status} />
-      </div>
-
-      {/* Date Issued */}
-      <div className="flex-1 min-w-0 max-w-[120px] mr-6">
-        <div className="text-[12px] text-[var(--text-secondary)]">{dateIssued}</div>
-      </div>
-
-      {/* Action Button */}
-      <div className="ml-3 flex-shrink-0">
-        {renderActionButton()}
-      </div>
+        {/* RIGHT SECTION - Date + Action Button (Right-aligned to far edge) */}
+        <div className="flex flex-col items-end flex-shrink-0 ml-auto">
+          <div className="text-[12px] text-[var(--text-secondary)] mb-2">{dateIssued}</div>
+          {renderActionButton()}
+        </div>
 
       {/* Upload Modal */}
       <ContractUploadModal
