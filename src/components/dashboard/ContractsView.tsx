@@ -139,10 +139,9 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
   );
 };
 
-// Generated Contracts Section
-const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
-  // Contract data matching pricing structure
-  const generatedContracts = [
+// Generated Contracts Section - Needs Attention
+const GeneratedNeedsAttentionSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+  const contractItems = [
     {
       id: "1",
       projectName: "Rue de la République EV Charging",
@@ -152,9 +151,39 @@ const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, cont
       status: "Ready for your review",
       showDropdown: true,
       solutionType: "ev-charging" as const
-    },
+    }
+  ];
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Needs Attention</h2>
+      <div className="space-y-4">
+        {contractItems.map((item, index) => (
+          <ContractItemCard
+            key={index}
+            id={item.id}
+            projectName={item.projectName}
+            location={item.location}
+            contractFileInfo={item._fileName}
+            status="your-action"
+            dateIssued={item.status}
+            actionType="download"
+            actionButtonText="Download & Review"
+            companyName={item._fileName.split(" from ")[1]}
+            solutionType={item.solutionType}
+            onActionClick={onActionClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Generated Contracts Section - Active Projects
+const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+  const contractItems = [
     {
-      id: "2", 
+      id: "2",
       projectName: "Avenue Victor Hugo Solar PV",
       location: "120 Avenue Victor Hugo, 75116 Paris",
       responsibility: "supplier" as const,
@@ -165,46 +194,85 @@ const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, cont
     {
       id: "3",
       projectName: "Friedrichstraße HVAC",
-      location: "Friedrichstraße 44, 10117 Berlin", 
+      location: "Friedrichstraße 44, 10117 Berlin",
       responsibility: "supplier" as const,
       _fileName: "Contract.zip from Heat Pumps LTD",
       status: "Preparing detailed breakdown",
       solutionType: "heat-pumps" as const
-    },
+    }
+  ];
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Active Projects</h2>
+      <div className="space-y-4">
+        {contractItems.map((item, index) => (
+          <ContractItemCard
+            key={index}
+            id={item.id}
+            projectName={item.projectName}
+            location={item.location}
+            contractFileInfo={item._fileName}
+            status="supplier-action"
+            dateIssued={item.status}
+            actionType="download"
+            actionButtonText="Download & Review"
+            companyName={item._fileName.split(" from ")[1]}
+            solutionType={item.solutionType}
+            onActionClick={onActionClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Generated Contracts Section - Accepted
+const GeneratedAcceptedSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+  const contractItems = [
     {
       id: "4",
       projectName: "Argyle Street EV Charging",
       location: "36 Argyle Street, Glasgow, G2 8BX",
       responsibility: "accepted" as const,
-      _fileName: "Contract.zip from EV Solutions LTD", 
+      _fileName: "Contract.zip from EV Solutions LTD",
       status: "Accepted",
       solutionType: "ev-charging" as const
     }
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Generated Contracts</h3>
-        <div className="space-y-3">
-          {generatedContracts.map((contract, index) => (
-            <ContractItemCard
-              key={index}
-              id={contract.id}
-              projectName={contract.projectName}
-              location={contract.location}
-              contractFileInfo={contract._fileName}
-              status={contract.responsibility === "your" ? "your-action" : contract.responsibility === "supplier" ? "supplier-action" : "completed"}
-              dateIssued={contract.status}
-              actionType={contract.responsibility === "accepted" ? "accept" : "download"}
-              actionButtonText={contract.responsibility === "accepted" ? "Accepted" : "Download & Review"}
-              companyName={contract._fileName.split(" from ")[1]}
-              solutionType={contract.solutionType}
-              onActionClick={onActionClick}
-            />
-          ))}
-        </div>
+    <div className="mb-8">
+      <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Accepted</h2>
+      <div className="space-y-4">
+        {contractItems.map((item, index) => (
+          <ContractItemCard
+            key={index}
+            id={item.id}
+            projectName={item.projectName}
+            location={item.location}
+            contractFileInfo={item._fileName}
+            status="completed"
+            dateIssued={item.status}
+            actionType="accept"
+            actionButtonText="Accepted"
+            companyName={item._fileName.split(" from ")[1]}
+            solutionType={item.solutionType}
+            onActionClick={onActionClick}
+          />
+        ))}
       </div>
+    </div>
+  );
+};
+
+// Generated Contracts Section
+const GeneratedContractsSection: React.FC<{ onActionClick: (action: string, contractId: string) => void }> = ({ onActionClick }) => {
+  return (
+    <div className="space-y-6">
+      <GeneratedNeedsAttentionSection onActionClick={onActionClick} />
+      <GeneratedActiveProjectsSection onActionClick={onActionClick} />
+      <GeneratedAcceptedSection onActionClick={onActionClick} />
     </div>
   );
 };
