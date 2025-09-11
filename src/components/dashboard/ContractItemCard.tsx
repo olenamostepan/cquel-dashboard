@@ -291,7 +291,7 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
     }
   };
 
-  // Active Contracts simplified version - only icon, project info, and badge
+  // Active Contracts simplified version - icon, project info, badge, and status text
   if (isActiveContracts) {
     return (
       <div 
@@ -303,19 +303,18 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
           background: "var(--Colours-ContainerBg, #FFF)"
         }}
       >
-        {/* LEFT SECTION - Project Info */}
-        <div className="flex items-center flex-1 min-w-0">
-          {/* Solution Icon */}
-          <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
+        <div className="flex items-center gap-4 flex-1">
+          {/* Solution Type Icon */}
+          <div className="w-14 h-14 flex items-center justify-center flex-shrink-0">
             <img
               src={getSolutionIcon(solutionType)}
               alt={solutionType}
               className="w-14 h-14 object-contain"
             />
           </div>
-
-          {/* Project Details */}
-          <div className="flex-1 min-w-0">
+          
+          {/* Project Info */}
+          <div className="flex-1 min-w-0 max-w-[200px] mr-20">
             <div className="flex items-center gap-2 mb-1">
               <div 
                 className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
@@ -329,11 +328,16 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
             </div>
             <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
           </div>
-        </div>
-
-        {/* RIGHT SECTION - Status Badge (Left-aligned) */}
-        <div className="flex-shrink-0 ml-6">
-          <StatusBadge status={status} customMessage={statusMessage} />
+          
+          {/* Responsibility Badge */}
+          <div className="flex items-center justify-center flex-shrink-0 w-[100px] mr-12">
+            <StatusBadge status={status} customMessage="CQuel's Action" />
+          </div>
+          
+          {/* Status Text */}
+          <div className="text-[14px] text-[var(--text-primary)] w-[280px] flex-shrink-0">
+            {statusMessage}
+          </div>
         </div>
       </div>
     );
