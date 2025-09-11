@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/ui/Header";
 import Navigation from "@/components/ui/Navigation";
 import WelcomeWidgets from "@/components/dashboard/WelcomeWidgets";
@@ -17,7 +18,18 @@ import UploadModal from "@/components/upload/UploadModal";
 import SuccessModal from "@/components/upload/SuccessModal";
 
 export default function Home() {
-  const [active, setActive] = React.useState("focus");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  
+  // Initialize active state based on URL parameter
+  const getInitialActive = () => {
+    if (tabParam && ['focus', 'all', 'briefs', 'tenders', 'surveys', 'pricing', 'contracts', 'project-detail', 'tender-results'].includes(tabParam)) {
+      return tabParam;
+    }
+    return 'focus';
+  };
+  
+  const [active, setActive] = React.useState(getInitialActive);
   const [isUploadModalOpen, setIsUploadModalOpen] = React.useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
   const [showSuccessBanner, setShowSuccessBanner] = React.useState(false);
@@ -80,24 +92,13 @@ export default function Home() {
     setActive(newTab);
   };
 
-  // Check for URL parameters on component mount
+  // Update active state when URL parameter changes
   React.useEffect(() => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tabParam = urlParams.get('tab');
-      const _projectIdParam = urlParams.get('projectId');
-      
-      if (tabParam && ['focus', 'all', 'briefs', 'tenders', 'surveys', 'pricing', 'contracts', 'project-detail', 'tender-results'].includes(tabParam)) {
-        setActive(tabParam);
-      } else {
-        // Default to focus if no tab parameter or invalid tab
-        setActive('focus');
-      }
-    } catch (error) {
-      console.error('Error reading URL parameters:', error);
-      setActive('focus');
+    const newActive = getInitialActive();
+    if (newActive !== active) {
+      setActive(newActive);
     }
-  }, []);
+  }, [tabParam]);
 
   // Update URL when active tab changes
   React.useEffect(() => {
@@ -288,7 +289,7 @@ export default function Home() {
             </div>
             <div className="bg-white border border-[var(--border-light)] rounded-lg p-6 text-[14px] text-[var(--text-secondary)]">
               {active.charAt(0).toUpperCase() + active.slice(1)} content coming soon
-            </div>
+        </div>
           </section>
         )}
       </main>
