@@ -343,10 +343,10 @@ const ContractCard: React.FC<ContractCardProps> = ({
           </div>
         ) : isActiveProject ? (
           <>
-            <div className="text-[12px] text-[var(--text-secondary)]">
+            <div className="text-[12px] text-[var(--text-secondary)] text-right">
               Sent on 21 Aug 25
             </div>
-            <div className="text-[14px] text-[var(--text-secondary)]">
+            <div className="text-[14px] text-[var(--text-secondary)] text-right">
               {status}
             </div>
           </>
