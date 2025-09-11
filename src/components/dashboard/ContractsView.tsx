@@ -194,25 +194,35 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
       <div>
         <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Active Projects</h3>
         <div className="space-y-3">
-          <ContractCard
+          <ContractItemCard
             id="contract-3"
             projectName="Leeds Retail HVAC"
             location="Leeds • ShopCentre"
-            responsibility="cquel"
-            _fileName="Contract.zip from ClimateControl Ltd"
-            status="CQuel is creating contract draft"
+            contractFileInfo=""
+            status="cquel-action"
+            dateIssued=""
+            actionType="create"
+            actionButtonText=""
+            companyName="ClimateControl Ltd"
             solutionType="heat-pumps"
-            isActiveProject={true}
+            isActiveContracts={true}
+            statusMessage="CQuel is creating contract draft"
+            onActionClick={onActionClick}
           />
-          <ContractCard
+          <ContractItemCard
             id="contract-4"
             projectName="Birmingham Warehouse Solar"
             location="Birmingham • LogisPark"
-            responsibility="cquel"
-            _fileName="Contract.zip from GreenEnergy Corp"
-            status="CQuel is reviewing your contract"
+            contractFileInfo=""
+            status="cquel-action"
+            dateIssued=""
+            actionType="create"
+            actionButtonText=""
+            companyName="GreenEnergy Corp"
             solutionType="solar"
-            isActiveProject={true}
+            isActiveContracts={true}
+            statusMessage="CQuel is reviewing your contract"
+            onActionClick={onActionClick}
           />
         </div>
       </div>
