@@ -495,7 +495,7 @@ const ContractsView: React.FC = () => {
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
   const [successBannerData, setSuccessBannerData] = useState<{
     contractCount: number;
-    contractType: 'upload' | 'request-help';
+    contractType: 'upload' | 'request-help' | 'decline';
     projectName?: string;
   } | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -643,7 +643,7 @@ const ContractsView: React.FC = () => {
       // Show success banner
       setSuccessBannerData({
         contractCount: 1,
-        contractType: 'upload', // Using upload type for now
+        contractType: 'decline',
         projectName: declinedContractData?.projectName || 'Contract Project'
       });
       setShowSuccessBanner(true);

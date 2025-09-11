@@ -7,7 +7,7 @@ interface ContractSuccessBannerProps {
   isVisible: boolean;
   onDismiss: () => void;
   contractCount: number;
-  contractType: 'upload' | 'request-help';
+  contractType: 'upload' | 'request-help' | 'decline';
   projectName?: string;
 }
 
@@ -25,6 +25,12 @@ export const ContractSuccessBanner: React.FC<ContractSuccessBannerProps> = ({
       return {
         title: "Contract help requested successfully!",
         message: `Our team will create a professional contract for ${projectName || 'this project'}. You'll receive a notification when it's ready for review.`,
+        icon: <FileText className="w-5 h-5 text-green-600" />
+      };
+    } else if (contractType === 'decline') {
+      return {
+        title: "Contract revision requested successfully!",
+        message: `Your feedback has been submitted for ${projectName || 'this contract'}. CQuel will coordinate with the supplier to prepare a revised version.`,
         icon: <FileText className="w-5 h-5 text-green-600" />
       };
     } else {
