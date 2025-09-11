@@ -241,6 +241,7 @@ interface ContractCardProps {
   solutionType?: "solar" | "heat-pumps" | "led" | "ev-charging";
   isActiveProject?: boolean;
   isAccepted?: boolean;
+  onActionClick?: (action: string, contractId: string, projectName?: string) => void;
 }
 
 const ContractCard: React.FC<ContractCardProps> = ({ 
@@ -254,7 +255,8 @@ const ContractCard: React.FC<ContractCardProps> = ({
   showDropdown = false,
   solutionType,
   isActiveProject = false,
-  isAccepted = false
+  isAccepted = false,
+  onActionClick
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -407,7 +409,7 @@ const GeneratedNeedsAttentionSection: React.FC<{ onActionClick: (action: string,
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Needs Attention</h2>
       <div className="space-y-4">
         {contractItems.map((item, index) => (
-          <ContractCard key={index} {...item} />
+          <ContractCard key={index} {...item} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
@@ -442,7 +444,7 @@ const GeneratedActiveProjectsSection: React.FC<{ onActionClick: (action: string,
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Active Projects</h2>
       <div className="space-y-4">
         {contractItems.map((item, index) => (
-          <ContractCard key={index} {...item} isActiveProject={true} />
+          <ContractCard key={index} {...item} isActiveProject={true} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
@@ -468,7 +470,7 @@ const GeneratedAcceptedSection: React.FC<{ onActionClick: (action: string, contr
       <h2 className="text-[18px] font-bold text-[var(--text-primary)] mb-6">Accepted</h2>
       <div className="space-y-4">
         {contractItems.map((item, index) => (
-          <ContractCard key={index} {...item} isAccepted={true} />
+          <ContractCard key={index} {...item} isAccepted={true} onActionClick={onActionClick} />
         ))}
       </div>
     </div>
