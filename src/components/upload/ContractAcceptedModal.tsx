@@ -41,8 +41,7 @@ export const ContractAcceptedModal: React.FC<ContractAcceptedModalProps> = ({
       <div 
         className="relative bg-white rounded-lg shadow-xl w-full mx-4"
         style={{ 
-          width: "580px",
-          border: "2px solid #1C75BC"
+          width: "580px"
         }}
       >
         {/* Content */}
