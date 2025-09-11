@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Upload, File, Trash2 } from "lucide-react";
 import Button from "@/components/ui/Button";
+import ContractUploadSuccessModal from "./ContractUploadSuccessModal";
 
 interface ContractFile {
   id: string;
@@ -33,6 +34,7 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
   const [files, setFiles] = useState<ContractFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const validateFile = (file: File): string | null => {
     const allowedTypes = [
@@ -115,6 +117,13 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     setIsUploading(false);
+    
+    // Show success modal instead of calling onSuccess immediately
+    setShowSuccessModal(true);
+  };
+
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false);
     onSuccess(files);
   };
 
@@ -253,6 +262,14 @@ export const ContractUploadModal: React.FC<ContractUploadModalProps> = ({
           </Button>
         </div>
       </div>
+
+      {/* Success Modal */}
+      <ContractUploadSuccessModal
+        isOpen={showSuccessModal}
+        onClose={handleSuccessModalClose}
+        projectName={projectName}
+        contractFileName={files.length > 0 ? files[0].name : undefined}
+      />
     </div>
   );
 };
