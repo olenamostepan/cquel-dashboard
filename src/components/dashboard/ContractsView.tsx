@@ -190,39 +190,29 @@ const ReadyToCreateSection: React.FC<{ onActionClick: (action: string, contractI
         </div>
       </div>
 
-      {/* Active Contracts Section */}
+      {/* Active Projects Section */}
       <div>
-        <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Active Contracts</h3>
+        <h3 className="text-[18px] font-bold text-[var(--text-primary)] mb-4">Active Projects</h3>
         <div className="space-y-3">
-          <ContractItemCard
+          <ContractCard
             id="contract-3"
             projectName="Leeds Retail HVAC"
             location="Leeds • ShopCentre"
-            contractFileInfo=""
-            status="cquel-action"
-            dateIssued=""
-            actionType="create"
-            actionButtonText=""
-            companyName="ClimateControl Ltd"
+            responsibility="cquel"
+            _fileName="Contract.zip from ClimateControl Ltd"
+            status="CQuel is creating contract draft"
             solutionType="heat-pumps"
-            isActiveContracts={true}
-            statusMessage="CQuel is creating contract draft"
-            onActionClick={onActionClick}
+            isActiveProject={true}
           />
-          <ContractItemCard
+          <ContractCard
             id="contract-4"
             projectName="Birmingham Warehouse Solar"
             location="Birmingham • LogisPark"
-            contractFileInfo=""
-            status="cquel-action"
-            dateIssued=""
-            actionType="create"
-            actionButtonText=""
-            companyName="GreenEnergy Corp"
+            responsibility="cquel"
+            _fileName="Contract.zip from GreenEnergy Corp"
+            status="CQuel is reviewing your contract"
             solutionType="solar"
-            isActiveContracts={true}
-            statusMessage="CQuel is reviewing your contract"
-            onActionClick={onActionClick}
+            isActiveProject={true}
           />
         </div>
       </div>
@@ -236,7 +226,7 @@ interface ContractCardProps {
   id: string;
   projectName: string;
   location: string;
-  responsibility?: "your" | "supplier" | "accepted";
+  responsibility?: "your" | "cquel" | "supplier" | "accepted";
   _fileName: string;
   status: string;
   actionButton?: string;
