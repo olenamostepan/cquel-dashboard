@@ -342,14 +342,23 @@ const ContractCard: React.FC<ContractCardProps> = ({
             Accepted
           </div>
         ) : isActiveProject ? (
-          <>
-            <div className="text-[12px] text-[var(--text-secondary)] text-right">
+          <div 
+            style={{ 
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              flex: "1 0 0",
+              alignSelf: "stretch"
+            }}
+          >
+            <div className="text-[12px] text-[var(--text-secondary)]">
               Sent on 21 Aug 25
             </div>
-            <div className="text-[14px] text-[var(--text-secondary)] text-right">
+            <div className="text-[14px] text-[var(--text-secondary)]">
               {status}
             </div>
-          </>
+          </div>
         ) : (
           <>
             <div className="text-[12px] text-[var(--text-secondary)]">
