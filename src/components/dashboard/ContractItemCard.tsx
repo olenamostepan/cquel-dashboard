@@ -334,9 +334,14 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
             <StatusBadge status={status} customMessage="CQuel's Action" />
           </div>
           
-          {/* Status Text */}
-          <div className="text-[14px] text-[var(--text-primary)] w-[280px] flex-shrink-0">
-            {statusMessage}
+          {/* Date and Status Text */}
+          <div className="w-[280px] flex-shrink-0">
+            <div className="text-[12px] text-[var(--text-secondary)] mb-1">
+              Sent on 21 Aug 25
+            </div>
+            <div className="text-[14px] text-[var(--text-primary)]">
+              {statusMessage}
+            </div>
           </div>
         </div>
       </div>
