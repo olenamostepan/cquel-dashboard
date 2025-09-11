@@ -341,7 +341,7 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
           style={{ 
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             alignItems: "flex-end",
             flex: "1 0 0",
             alignSelf: "stretch"
