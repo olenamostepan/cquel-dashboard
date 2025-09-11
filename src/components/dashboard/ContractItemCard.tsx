@@ -303,18 +303,19 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
           background: "var(--Colours-ContainerBg, #FFF)"
         }}
       >
-        <div className="flex items-center gap-4 flex-1">
-          {/* Solution Type Icon */}
-          <div className="w-14 h-14 flex items-center justify-center flex-shrink-0">
+        {/* LEFT SECTION - Project Info */}
+        <div className="flex items-center flex-shrink-0 min-w-0" style={{ width: "300px" }}>
+          {/* Solution Icon */}
+          <div className="w-14 h-14 flex items-center justify-center mr-4 flex-shrink-0">
             <img
               src={getSolutionIcon(solutionType)}
               alt={solutionType}
               className="w-14 h-14 object-contain"
             />
           </div>
-          
-          {/* Project Info */}
-          <div className="flex-shrink-0 w-[200px] mr-20">
+
+          {/* Project Details */}
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <div 
                 className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
@@ -328,20 +329,20 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
             </div>
             <div className="text-[12px] text-[var(--text-secondary)] truncate">{location}</div>
           </div>
-          
-          {/* Responsibility Badge */}
-          <div className="flex items-center flex-shrink-0 w-[100px] mr-12">
-            <StatusBadge status={status} customMessage="CQuel's Action" />
+        </div>
+
+        {/* CENTER SECTION - Status Badge (Fixed Position) */}
+        <div className="flex items-center justify-center flex-shrink-0" style={{ width: "200px", marginLeft: "50px" }}>
+          <StatusBadge status={status} customMessage="CQuel's Action" />
+        </div>
+
+        {/* RIGHT SECTION - Date and Status Text (Right-aligned to far edge) */}
+        <div className="flex flex-col items-end flex-shrink-0 ml-auto" style={{ width: "220px" }}>
+          <div className="text-[12px] text-[var(--text-secondary)] mb-1">
+            Sent on 21 Aug 25
           </div>
-          
-          {/* Date and Status Text */}
-          <div className="w-[280px] flex-shrink-0">
-            <div className="text-[12px] text-[var(--text-secondary)] mb-1">
-              Sent on 21 Aug 25
-            </div>
-            <div className="text-[14px] text-[var(--text-primary)]">
-              {statusMessage}
-            </div>
+          <div className="text-[14px] text-[var(--text-primary)]">
+            {statusMessage}
           </div>
         </div>
       </div>
