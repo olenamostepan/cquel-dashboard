@@ -314,7 +314,7 @@ export const ContractItemCard: React.FC<ContractItemCardProps> = ({
           </div>
           
           {/* Project Info */}
-          <div className="flex-1 min-w-0 max-w-[200px] mr-20">
+          <div className="flex-shrink-0 w-[200px] mr-20">
             <div className="flex items-center gap-2 mb-1">
               <div 
                 className="text-[14px] font-bold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--brand-primary)]"
