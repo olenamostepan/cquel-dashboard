@@ -118,7 +118,7 @@ function HomeContent() {
   return (
     <div className="min-h-screen">
       <Header 
-                    customerName="Drees&Sommer" 
+                    customerName="Level" 
         showBreadcrumbs={active === "project-detail" || active === "tender-results"}
         breadcrumbItems={active === "project-detail" ? [
           {
@@ -189,7 +189,7 @@ function HomeContent() {
                   paddingBottom: "var(--Distance-32, 32px)",
                 }}
               >
-                Welcome back Simon
+                Welcome back Paul
               </div>
               {/* Client demo version */}
               <div>
@@ -217,7 +217,7 @@ function HomeContent() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back Simon
+              Welcome back Paul
             </div>
             <AllProjectsView onTabChange={handleTabChange} />
           </section>
@@ -285,7 +285,7 @@ function HomeContent() {
                 paddingBottom: "var(--Distance-32, 32px)",
               }}
             >
-              Welcome back Simon
+              Welcome back Paul
             </div>
             <div className="bg-white border border-[var(--border-light)] rounded-lg p-6 text-[14px] text-[var(--text-secondary)]">
               {active.charAt(0).toUpperCase() + active.slice(1)} content coming soon
