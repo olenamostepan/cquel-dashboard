@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SupplierScoringSidebar from "./SupplierScoringSidebar";
+import DetailedComparisonTable from "./DetailedComparisonTable";
 
 
 // Data Interfaces
@@ -19,6 +20,21 @@ interface Supplier {
     omCostsPerYear: number;
     materialsCost: number;
     estimatedPayback: number;
+  };
+  // Detailed comparison data
+  supplierRelevance?: {
+    generalScore: number;
+    assetType: number;
+    stakeholderManagement: number;
+    assetSize: number;
+    location: number;
+  };
+  speed?: { [key: string]: string | number | boolean };
+  technicalScope?: { [key: string]: string | number | boolean };
+  financialScope?: {
+    capex: { [key: string]: string | number | boolean };
+    ppa: { [key: string]: string | number | boolean };
+    hirePurchase: { [key: string]: string | number | boolean };
   };
 }
 
@@ -51,6 +67,30 @@ const tenderData: TenderResults = {
         omCostsPerYear: 4500,
         materialsCost: 495000,
         estimatedPayback: 7.2
+      },
+      supplierRelevance: {
+        generalScore: 4.5,
+        assetType: 4,
+        stakeholderManagement: 5,
+        assetSize: 4,
+        location: 5
+      },
+      speed: {
+        deliveryTime: "12 weeks",
+        installationTime: "8 weeks"
+      },
+      technicalScope: {
+        systemCapacity: "900 kWp",
+        panelType: "Monocrystalline",
+        inverterType: "String inverters",
+        warranty: "25 years",
+        maintenanceSchedule: "Annual",
+        omApproach: "Comprehensive maintenance package"
+      },
+      financialScope: {
+        capex: { price: 675000 },
+        ppa: { rate: "0.08 €/kWh" },
+        hirePurchase: { rate: "4.5%" }
       }
     },
     {
@@ -69,6 +109,30 @@ const tenderData: TenderResults = {
         omCostsPerYear: 3800,
         materialsCost: 540000,
         estimatedPayback: 7.8
+      },
+      supplierRelevance: {
+        generalScore: 4.0,
+        assetType: 4,
+        stakeholderManagement: 4,
+        assetSize: 4,
+        location: 4
+      },
+      speed: {
+        deliveryTime: "10 weeks",
+        installationTime: "6 weeks"
+      },
+      technicalScope: {
+        systemCapacity: "900 kWp",
+        panelType: "Polycrystalline",
+        inverterType: "Micro inverters",
+        warranty: "20 years",
+        maintenanceSchedule: "Bi-annual",
+        omApproach: "Standard maintenance package"
+      },
+      financialScope: {
+        capex: { price: 729000 },
+        ppa: { rate: "0.085 €/kWh" },
+        hirePurchase: { rate: "5.0%" }
       }
     },
     {
@@ -87,6 +151,30 @@ const tenderData: TenderResults = {
         omCostsPerYear: 5200,
         materialsCost: 428000,
         estimatedPayback: 6.5
+      },
+      supplierRelevance: {
+        generalScore: 3.0,
+        assetType: 3,
+        stakeholderManagement: 3,
+        assetSize: 3,
+        location: 3
+      },
+      speed: {
+        deliveryTime: "14 weeks",
+        installationTime: "10 weeks"
+      },
+      technicalScope: {
+        systemCapacity: "900 kWp",
+        panelType: "Thin-film",
+        inverterType: "Central inverter",
+        warranty: "15 years",
+        maintenanceSchedule: "Annual",
+        omApproach: "Basic maintenance package"
+      },
+      financialScope: {
+        capex: { price: 612000 },
+        ppa: { rate: "0.075 €/kWh" },
+        hirePurchase: { rate: "4.0%" }
       }
     }
   ]
@@ -365,6 +453,74 @@ const TenderResultsView: React.FC = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Detailed Comparison Table */}
+      <div className="mt-8">
+        <h2 className="text-[20px] font-bold text-[var(--text-primary)] mb-4">
+          Detailed Comparison
+        </h2>
+        <DetailedComparisonTable
+          suppliers={data.suppliers as any}
+          categories={[
+            {
+              name: "Supplier relevance",
+              fields: [
+                {
+                  key: "generalScore",
+                  label: "General score",
+                },
+                {
+                  key: "assetType",
+                  label: "Asset type",
+                  tooltip: "Proven asset type experience:\n1. Retail centres\n2. Large numbers of visitors\n3. Common Parts\n4. High profile brand",
+                },
+                {
+                  key: "stakeholderManagement",
+                  label: "Stakeholder management",
+                  tooltip: "Proven stakeholder experience:\n1. 60-200 Tenants\n2. Asset Managers",
+                },
+                {
+                  key: "assetSize",
+                  label: "Asset size",
+                  tooltip: "Proven experience from delivering sizable solar systems to bigger commercial real estate assets with",
+                },
+                {
+                  key: "location",
+                  label: "Location",
+                  tooltip: "Years & no. projects in UK commercial real estate",
+                },
+              ],
+            },
+            {
+              name: "Speed",
+              fields: [
+                { key: "deliveryTime", label: "Delivery time" },
+                { key: "installationTime", label: "Installation time" },
+              ],
+            },
+            {
+              name: "Technical scope",
+              fields: [
+                { key: "systemCapacity", label: "System capacity" },
+                { key: "panelType", label: "Panel type" },
+                { key: "inverterType", label: "Inverter type" },
+                { key: "warranty", label: "Warranty" },
+                { key: "maintenanceSchedule", label: "Maintenance schedule" },
+                { key: "omApproach", label: "O&M approach" },
+              ],
+            },
+            {
+              name: "Financial scope",
+              fields: [
+                { key: "capexPrice", label: "Capex Price" },
+                { key: "ppaRate", label: "PPA Rate" },
+                { key: "hirePurchaseRate", label: "Hire Purchase Rate" },
+              ],
+            },
+          ]}
+          onScoreClick={handleScoreClick}
+        />
       </div>
 
       {/* Supplier Scoring Sidebar */}
