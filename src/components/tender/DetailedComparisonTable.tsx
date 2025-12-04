@@ -64,7 +64,7 @@ const DetailedComparisonTable: React.FC<DetailedComparisonTableProps> = ({
     supplier: Supplier,
     categoryName: string,
     fieldKey: string
-  ): string | number => {
+  ): string | number | boolean => {
     if (categoryName === "Supplier relevance") {
       if (!supplier.supplierRelevance) return "";
       const relevance = supplier.supplierRelevance as any;

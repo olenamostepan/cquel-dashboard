@@ -460,9 +460,10 @@ const TenderResultsView: React.FC = () => {
         <h2 className="text-[20px] font-bold text-[var(--text-primary)] mb-4">
           Detailed Comparison
         </h2>
-        <DetailedComparisonTable
-          suppliers={data.suppliers as any}
-          categories={[
+        {data.suppliers && data.suppliers.length > 0 ? (
+          <DetailedComparisonTable
+            suppliers={data.suppliers as any}
+            categories={[
             {
               name: "Supplier relevance",
               fields: [
@@ -519,8 +520,13 @@ const TenderResultsView: React.FC = () => {
               ],
             },
           ]}
-          onScoreClick={handleScoreClick}
-        />
+            onScoreClick={handleScoreClick}
+          />
+        ) : (
+          <div className="text-[var(--text-secondary)] p-4">
+            No suppliers data available
+          </div>
+        )}
       </div>
 
       {/* Supplier Scoring Sidebar */}

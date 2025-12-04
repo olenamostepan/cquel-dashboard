@@ -390,8 +390,7 @@ const ProjectsTable: React.FC<{ onTabChange?: (tab: string) => void }> = ({ onTa
                       variant="neutral" 
                       size="custom" 
                       className="w-[140px] whitespace-nowrap"
-                      onClick={() => {letssh
-                        
+                      onClick={() => {
                         if (project.action === "Go to Brief") {
                           const briefBuilderUrl = `https://cquel-brief-builder.vercel.app/?briefId=${index + 1}&userId=456`;
                           window.open(briefBuilderUrl, '_blank');
